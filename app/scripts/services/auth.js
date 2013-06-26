@@ -21,6 +21,9 @@ angular.module('vnbidding.github.ioApp')
       },
       logout: function() {
         auth.logout();
+      },
+      loginError: function(error) {
+        alert(error);
       }
     }
   });

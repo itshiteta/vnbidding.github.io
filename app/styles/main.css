@@ -1,1 +1,23 @@
 /* Will be compiled down to a single stylesheet with your sass files */
+a {
+    text-shadow: none !important;
+}
+.vnb-header{
+    background: #3498DB;
+    color:  #F2F2F2;
+}
+.vnb-header a.brand {
+    color: #F2F2F2;
+    font-weight: 100;
+}
+.vnb-log-box{
+}
+.vnb-time-countdown, .vnb-top-price {
+    font-weight: 100;
+    font-size: 3em;
+    margin: 10px 0;
+    line-height: 100%;
+}
+.vnb-auction-form {
+    margin: 10px 0;
+}
