@@ -1,0 +1,29 @@
+<p>This is the user view.</p>
+
+<div class="container">
+    <div class="row">
+        <div class="span6">
+            <a class="btn" ng-hide="user" ng-click="login('facebook')">Login</a>
+            <div ng-show="user">
+                <form class="form-inline" ng-submit="bid()">
+                    <fieldset>
+                        <legend>Logged by {{ user.name }}, <small><a ng-click="logout()">[logout]</a></small></legend>
+                        <div class="input-append">
+                            <input class="span2" ng-model="item.price" type="text" pattern="[1-9]\d*" oninvalid="this.setCustomValidity('Bid price should be a positive integer')" placeholder="price">
+                            <span class="add-on">.000</span>
+                        </div>
+                        <input type="text" ng-model="item.name" placeholder="name">
+                        <button type="submit" class="btn">Bid</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <div class="span6">
+            <div class="well">
+                <div ng-repeat="item in bids">
+                    {{ item | json }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
