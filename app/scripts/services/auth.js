@@ -18,6 +18,9 @@ angular.module('vnbidding.github.ioApp')
     return {
       login: function (provider, data) {
         auth.login(provider, data);
+      },
+      logout: function() {
+        auth.logout();
       }
     }
   });

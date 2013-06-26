@@ -1,13 +1,41 @@
 'use strict';
 
 angular.module('vnbidding.github.ioApp')
-  .controller('UserCtrl', function ($scope, auth, $rootScope) {
+  .controller('UserCtrl', function ($scope, auth, $rootScope, safeApply, angularFireCollection) {
+    $scope.bids = angularFireCollection('https://bidding.firebaseio.com/bids');
+
+
+    //Login function
     $scope.login = function (provider, data) {
       auth.login(provider, data)
     };
 
+    //Logout function
+    $scope.logout = function () {
+      auth.logout();
+      safeApply($scope);
+    };
+
+    //Bid function
+    $scope.bid = function() {
+      var price = $scope.item.price
+        , name = $scope.item.name;
+
+      $scope.bids.add({
+        user: $scope.user.username,
+        price: price,
+        name: name
+      })
+
+    };
+
     $rootScope.$on("login", function(event, user) {
       $scope.user = user;
-      $scope.$apply();
-    })
+      safeApply($scope);
+    });
+
+    $rootScope.$on("logout", function(event) {
+      delete $scope.user;
+      safeApply($scope);
+    });
   });
