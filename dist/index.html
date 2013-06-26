@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="stylesheet" href="styles/d0e5e809.main.css">
+    <link rel="stylesheet" href="styles/12261c95.main.css">
   </head>
   <body ng-app="vnbidding.github.ioApp">
     <!--[if lt IE 7]>
@@ -23,7 +23,14 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="container" ng-view=""></div>
+    <div>
+        <div class="navbar nav-pills vnb-header">
+            <div class="container-fluid">
+                <a href="/#/" class="brand">VNBidding.com</a>
+            </div>
+        </div>
+        <div class="container-fluid" ng-view=""></div>
+    </div>
 
     <script type="text/javascript" src="https://cdn.firebase.com/v0/firebase.js"></script>
     <script type="text/javascript" src="https://cdn.firebase.com/v0/firebase-auth-client.js"></script>
@@ -34,14 +41,14 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular-sanitize.min.js"></script>
     <script type="text/javascript" src="components/angular-fire/angularFire.js"></script>
 
-    <script src="scripts/ca2acfb2.scripts.js"></script>
+    <script src="scripts/e1651c95.scripts.js"></script>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-    <script>
+    <!--<script>
       var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
       (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
       g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
       s.parentNode.insertBefore(g,s)}(document,'script'));
-    </script>
+    </script>-->
   </body>
 </html>
