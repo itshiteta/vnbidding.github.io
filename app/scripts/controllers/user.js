@@ -2,8 +2,6 @@
 
 angular.module('vnbidding.github.ioApp')
   .controller('UserCtrl', function ($scope, auth, $rootScope, safeApply, angularFireCollection) {
-    $scope.bids = angularFireCollection('https://bidding.firebaseio.com/bids');
-
 
     //Login function
     $scope.login = function (provider, data) {

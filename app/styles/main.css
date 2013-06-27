@@ -21,3 +21,15 @@ a {
 .vnb-auction-form {
     margin: 10px 0;
 }
+.bid-list .media-heading {
+    font-weight: 300;
+}
+
+.bid-list .media-body p {
+    /*color: #3498DB;*/
+    color: #E67E22;
+    margin: 0;
+}
+.bid-list .media-body small:before {
+    content: '\2014 \00A0';
+}

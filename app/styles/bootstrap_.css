@@ -5622,5 +5622,3 @@ a.badge:hover {
 .affix {
   position: fixed;
 }
-
-/* Will be compiled down to a single stylesheet with your sass files */
