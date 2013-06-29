@@ -24,22 +24,20 @@ angular.module('vnbidding.github.ioApp')
     //Action bid
     $scope.bid = function () {
 
-      var user = {userId: $scope.user.id, name: $scope.user.name, username: $scope.user.username},
+      var user = {userId: $rootScope.user.id, name: $rootScope.user.name, username: $rootScope.user.username},
         price = $scope.price,
         auctionId = $scope.auction.id;
 
       //Add bid to Firebase
-      $scope.bids.add({
+      var item = $scope.bids.add({
         user: user,
         auction: {auctionId: auctionId},
         bidPrice: price,
-        bidTime: Firebase.ServerValue.TIMESTAMP
+        bidTime: Firebase.ServerValue.TIMESTAMP,
+        ".priority": price * -1
       });
+
+
     };
 
-    //Bid login auth
-    $rootScope.$on("login", function (event, user) {
-      $scope.user = user;
-      safeApply($scope);
-    });
   });

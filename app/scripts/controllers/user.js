@@ -26,14 +26,4 @@ angular.module('vnbidding.github.ioApp')
       })
 
     };
-
-    $rootScope.$on("login", function(event, user) {
-      $scope.user = user;
-      safeApply($scope);
-    });
-
-    $rootScope.$on("logout", function(event) {
-      delete $scope.user;
-      safeApply($scope);
-    });
   });

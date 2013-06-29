@@ -4,21 +4,26 @@
             <div class="thumbnails">
                 <div class="span4">
                     <a href="#" class="thumbnail">
-                        <img data-src="holder.js/360x270" alt="360x270" style="width: 360px; height: 270px;"
-                             src="{{ auction.image }}">
+                        <img alt="360x270" style="width: 360px; height: 270px;"
+                             ng-src="{{ auction.image }}">
                     </a>
                 </div>
                 <div class="span4">
-                    <h3>{{ auction.name }}</h3>
-                    <p>{{ auction.description }}</p>
+                    <h3 class="auction-name">{{ auction.name }}</h3>
+                    <p class="auction-description">{{ auction.description }}</p>
                     <div class="vnb-auction-form">
                         <p class="vnb-time-countdown">00:12:03</p>
                         <div ng-show="user">
-                            <form ng-submit="bid()">
-                                <!--<input type="hidden" ng-model="price" value="1000"/>-->
-                                <input class="btn btn-large btn-primary" type="submit" value="Đấu giá"/>
+                            <form class="form-inline" ng-submit="bid()">
+                                <div class="input-append">
+                                    <input type="text" ng-model="price" class="span1">
+                                    <button class="btn" type="submit">Đấu giá</button>
+                                </div>
                             </form>
                         </div>
+                        <!--<div ng-show="!user.username">-->
+                            <!--<a class="btn" ng-click="login()">Login</a>-->
+                        <!--</div>-->
                     </div>
                 </div>
             </div>
@@ -28,7 +33,7 @@
                 <ul class="media-list bid-list">
                     <li class="media" ng-repeat="item in bids">
                         <a class="pull-left" href="#">
-                            <img class="media-object" data-src="http://graph.facebook.com/{{ item.user.username }}/picture" alt="64x64" style="width: 64px; height: 64px;" src="http://graph.facebook.com/mralex.quang/picture">
+                            <img class="media-object" alt="64x64" style="width: 64px; height: 64px;" ng-src="http://graph.facebook.com/{{ item.user.username }}/picture">
                         </a>
                         <div class="media-body">
                             <h4 class="media-heading">{{ item.user.name }}</h4>

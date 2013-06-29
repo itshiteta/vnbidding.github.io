@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('vnbidding.github.ioApp')
-  .factory('auth', function ($rootScope) {
+  .factory('auth', function ($rootScope, safeApply) {
     var self = this
       , ref = new Firebase("https://bidding.firebaseio.com")
       , auth = new FirebaseAuthClient(ref, function (error, user) {
@@ -15,7 +15,25 @@ angular.module('vnbidding.github.ioApp')
           $rootScope.$emit("logout");
         }
       });
-    return {
+
+
+    //Bid login auth
+    $rootScope.$on("login", function (event, user) {
+      $rootScope.user = user;
+      safeApply($rootScope);
+    });
+
+    $rootScope.$on("login", function(event, user) {
+      $rootScope.user = user;
+      safeApply($rootScope);
+    });
+
+    $rootScope.$on("logout", function(event) {
+      delete $rootScope.user;
+      safeApply($rootScope);
+    });
+
+    return $rootScope.auth = {
       login: function (provider, data) {
         auth.login(provider, data);
       },
