@@ -3,4 +3,3 @@ node_modules
 .sass-cache
 app/components
 npm-debug.log
-.idea
