@@ -26,6 +26,7 @@
                 <li class="span4" ng-repeat="auction in auctions">
                     <div class="auction">
                         <img ng-src="{{ auction.product.imageUrl }}" alt=""/>
+                        <p class="price">{{ auction.initPrice }}</p>
                         <!--<p class="time">{{ auction.endTime }}</p>-->
                         <p class="time">00:13:09</p>
                     </div>
