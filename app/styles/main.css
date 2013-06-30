@@ -100,6 +100,40 @@ header.flat .title {
 .auction-list {
     margin-top: 20px;
 }
+.auction-list .auction {
+    background: #ffffff;
+    text-align: center;
+}
+.auction-list li {
+    margin: 0 6px 24px 6px !important;
+    border-bottom: 1px solid #DDDDDD;
+}
+.auction-list .auction > img{
+    padding-top: 12px;
+    height: 200px;
+}
+.auction-list .auction p {
+    text-align: left;
+    padding: 10px;
+    margin: 0;
+    font-weight: 200;
+    background: #1ABC9C;
+}
+.auction-list .auction .name {
+    color: #2C3E50;
+}
+.auction-list .auction .price {
+
+}
+.auction-list .auction .time {
+    color: #F2F2F2;
+    font-weight: 100;
+    font-size: 2em;
+}
+.auction-list .auction:hover {
+
+}
+
 
 /* Button */
 .btn {
