@@ -32,30 +32,26 @@
 <![endif]-->
 
 <!-- Add your site or application content here -->
-<div>
-    <div class="navbar nav-pills vnb-header">
-        <div class="container-fluid">
-            <ul class="nav logo">
-                <li><a href="/"><img src="img/logo.png" alt="vnbidding.com"/></a></li>
-            </ul>
-            <ul class="nav info pull-right">
-                <li ng-show="!user.username">
-                    <a class="login" ng-click="auth.login('facebook')">
-                        <img src="img/facebook.png" alt="Đăng nhập với Facebook"/>
-                        <small>Đăng nhập với Facebook</small>
-                    </a>
-                </li>
-                <li ng-show="!!user.username">
-                    <a class="profile">
-                        <img ng-src="http://graph.facebook.com/{{ user.username }}/picture" alt="{{ user.name }}"/>
-                        <small>{{ user.name }}</small>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="container-fluid" ng-view></div>
+<div class="navbar nav-pills navbar-fixed-top vnb-header">
+        <ul class="nav logo">
+            <li><a href="/"><img src="img/logo.png" alt="vnbidding.com"/></a></li>
+        </ul>
+        <ul class="nav info pull-right">
+            <li ng-show="!user.username">
+                <a class="login" ng-click="auth.login('facebook')">
+                    <img src="img/facebook.png" alt="Đăng nhập với Facebook"/>
+                    <small>Đăng nhập với Facebook</small>
+                </a>
+            </li>
+            <li ng-show="!!user.username">
+                <a class="profile">
+                    <img ng-src="http://graph.facebook.com/{{ user.username }}/picture" alt="{{ user.name }}"/>
+                    <small>{{ user.name }}</small>
+                </a>
+            </li>
+        </ul>
 </div>
+<div class="container-fluid vnb-container" ng-view></div>
 
 <script type='text/javascript' src='https://cdn.firebase.com/v0/firebase.js'></script>
 <script type='text/javascript' src='https://cdn.firebase.com/v0/firebase-auth-client.js'></script>
@@ -65,6 +61,7 @@
 <script src="components/angular-cookies/angular-cookies.js"></script>
 <script src="components/angular-sanitize/angular-sanitize.js"></script>
 <script type="text/javascript" src="components/angular-fire/angularFire.js"></script>
+<script type="text/javascript" src="components/lodash/lodash.js"></script>
 
 <!-- build:js scripts/scripts.js -->
 <script src="scripts/app.js"></script>
@@ -72,6 +69,7 @@
 <script src="scripts/controllers/user.js"></script>
 <script src="scripts/services/auth.js"></script>
 <script src="scripts/services/safeApply.js"></script>
+<script src="scripts/services/models.js"></script>
 <!-- endbuild -->
 
 <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->

@@ -4,16 +4,18 @@ a {
 }
 
 body {
-    background: #F9F9F9;
+    background: #F2F2F2;
 }
 
 .vnb-header {
-    /*background: #FFFFFF;*/
-    background: rgba(255, 255, 255, .98);
+    background: #2C3E50;
     color: #333;
     height: 60px;
     overflow: hidden;
-    border-bottom: 1px solid #ddd;
+}
+
+.vnb-header .logo {
+    background: #1ABC9C;
 }
 
 .vnb-header .logo a {
@@ -35,7 +37,7 @@ body {
 
 .vnb-header .info a.profile {
     background: none;
-    color: #4b5c66;
+    color: #f2f2f2;
 }
 
 .vnb-header .info a.login:hover {
@@ -44,57 +46,64 @@ body {
 
 .vnb-header .info a img {
     width: 26px;
-    border-right: 1px dotted #f2f2f2;
 }
 
-.vnb-log-box {
-
+.vnb-container {
+    padding-top: 100px;
+    padding-left: 0;
 }
 
-.vnb-time-countdown, .vnb-top-price {
-    font-weight: 100;
-    font-size: 3em;
-    margin: 10px 0;
-    line-height: 100%;
+/* Aside left */
+.auction-zone {
+    position: fixed;
+    overflow: hidden;
+    background: #f2f2f2;
+    width: 100%;
+    height: auto;
 }
 
-.vnb-auction-form {
-    margin: 10px 0;
+.auction-form {
+    padding: 20px 30px;
 }
 
-.vnb-auction-form form {
-    margin: 50px 0 0;
-}
-
-.vnb-auction-form form input,
-.vnb-auction-form .input-append .add-on:last-child {
-    border-radius: 0;
+header.flat {
     height: 40px;
-    vertical-align: middle;
+    overflow: hidden;
+    color: #FFFFFF;
+    margin-bottom: 10px;
+    font-size: 1.5em;
+    border-bottom: 1px solid #dddddd;
 }
 
-.auction-description {
-    min-height: 40px;
-}
-
-.bid-list .media-heading {
-    font-weight: 300;
-}
-
-.bid-list .media-body p {
-    /*color: #3498DB;*/
-    color: #E67E22;
+header.flat h3 {
     margin: 0;
+    font-weight: 100;
+    font-size: 1em;
+    text-transform: uppercase;
+    color: #2C3E50;
 }
 
-.bid-list .media-body small:before {
-    content: '\2014 \00A0';
+header.flat .icon {
+    float: left;
+    background: #2C3E50;
+    color: #FFFFFF;
+    padding: 5px 10px;
+    margin-right: 20px;
+}
+header.flat .title {
+    float: left;
+    background: #2C3E50;
+    color: #FFFFFF;
+    padding: 0 20px;
+}
+
+.auction-list {
+    margin-top: 20px;
 }
 
 /* Button */
-
-.btn.flat {
-    background: none;
+.btn {
+    background: #3498DB;
     border: 1px solid #ddd;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
@@ -104,5 +113,34 @@ body {
     border-radius: 0;
     margin: 0 !important;
     padding: 4px 12px !important;
-    color: #808080;
+    color: #ffffff;
+    font-weight: 200;
+}
+
+/* Input */
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    border: 1px solid #dddddd;
+    height: 40px;
+    font-weight: 200;
 }
