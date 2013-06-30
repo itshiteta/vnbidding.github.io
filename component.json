@@ -8,7 +8,8 @@
     "angular-resource": "~1.0.5",
     "angular-cookies": "~1.0.5",
     "angular-sanitize": "~1.0.5",
-    "angular-fire": "*"
+    "angular-fire": "*",
+    "angular-ui-bootstrap-bower": "*"
   },
   "devDependencies": {
     "angular-mocks": "~1.0.5",

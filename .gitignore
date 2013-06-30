@@ -1,6 +1,5 @@
 node_modules
 .tmp
 .sass-cache
-.idea
 app/components
 npm-debug.log
