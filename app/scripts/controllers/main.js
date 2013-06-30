@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('vnbidding.github.ioApp')
-  .controller('MainCtrl', function ($scope, auth, $rootScope, safeApply, angularFireCollection) {
+  .controller('MainCtrl', function ($scope, auth, models) {
 
-    var bidsUrl = 'https://bidding.firebaseio.com/bids';
+    /*var bidsUrl = 'https://bidding.firebaseio.com/bids';
 
     //Get top 10 bids
     $scope.bids = angularFireCollection(new Firebase(bidsUrl).limit(5));
@@ -38,6 +38,16 @@ angular.module('vnbidding.github.ioApp')
       });
 
 
+    };*/
+
+    $scope.auctions = models.Auction.get();
+
+
+    $scope.createAuction = function () {
+      var auction = new models.Auction($scope.newAuction);
+      auction.create();
+      $scope.newAuction = null;
     };
+
 
   });

@@ -1,48 +1,37 @@
-<div class="container">
-    <div class="row">
-        <div class="span8">
-            <div class="thumbnails">
-                <div class="span4">
-                    <a href="#" class="thumbnail">
-                        <img alt="360x270" style="width: 360px; height: 270px;"
-                             ng-src="{{ auction.image }}">
-                    </a>
-                </div>
-                <div class="span4">
-                    <h3 class="auction-name">{{ auction.name }}</h3>
-                    <p class="auction-description">{{ auction.description }}</p>
-                    <div class="vnb-auction-form">
-                        <p class="vnb-time-countdown">00:12:03</p>
-                        <div ng-show="user">
-                            <form class="form-inline" ng-submit="bid()">
-                                <div class="input-append">
-                                    <input type="text" ng-model="price" class="span1">
-                                    <button class="btn" type="submit">Đấu giá</button>
-                                </div>
-                            </form>
-                        </div>
-                        <!--<div ng-show="!user.username">-->
-                            <!--<a class="btn" ng-click="login()">Login</a>-->
-                        <!--</div>-->
-                    </div>
-                </div>
-            </div>
+<div class="row-fluid">
+    <aside class="span3 auction-zone">
+        <header class="flat">
+            <h3><span class="icon"><i class="icon-white icon-plus"></i></span> NEW AUCTION</h3>
+        </header>
+        <div class="auction-form">
+            <form ng-submit="createAuction()">
+                <input class="span12" type="text" ng-model="newAuction.product.name" placeholder="tên sản phẩm" required/>
+                <input class="span12" type="url" ng-model="newAuction.product.imageUrl" placeholder="link hình ảnh" required/>
+                <input class="span12" type="number" ng-model="newAuction.initPrice" placeholder="giá khởi điểm" required/>
+                <input class="span12" type="number" ng-model="newAuction.minStep" placeholder="min step" required/>
+                <input class="span12" type="date" ng-model="newAuction.endTime" placeholder="Thời gian kết thúc" required/>
+                <input class="span12" type="date" ng-model="newAuction.startTime" placeholder="Thời gian bắt đầu"/>
+
+                <input type="submit" value="Tạo đấu giá" class="btn btn-primary"/>
+            </form>
         </div>
-        <div class="span4">
-            <div class="vnb-log-box">
-                <ul class="media-list bid-list">
-                    <li class="media" ng-repeat="item in bids">
-                        <a class="pull-left" href="#">
-                            <img class="media-object" alt="64x64" style="width: 64px; height: 64px;" ng-src="http://graph.facebook.com/{{ item.user.username }}/picture">
-                        </a>
-                        <div class="media-body">
-                            <h4 class="media-heading">{{ item.user.name }}</h4>
-                            <p>Đấu giá: <span>{{ item.bidPrice || 0 }}</span> VND</p>
-                            <small class="muted">Lúc {{ item.bidTime | date:'HH:mm:ss, dd-MM-yyyy' }}</small>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+    </aside>
+    <div class="span9 pull-right">
+        <header class="flat">
+            <h3><span class="title">Danh sách Đấu giá</span></h3>
+        </header>
+
+        <div class="row-fluid">
+            <ul class="auction-list thumbnails">
+                <li class="span4" ng-repeat="auction in auctions">
+                    <div class="">
+                        <img ng-src="{{ auction.product.imageUrl }}" alt=""/>
+                        <p>{{ auction.product.name }}</p>
+                        <p>{{ auction.initPrice }}</p>
+                        <p>{{ auction.endTime }}</p>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
