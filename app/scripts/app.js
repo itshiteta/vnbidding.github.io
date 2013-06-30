@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('vnbidding.github.ioApp', ['firebase'])
+angular.module('vnbidding.github.ioApp', ['firebase','ui.bootstrap'])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {

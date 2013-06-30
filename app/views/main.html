@@ -1,24 +1,64 @@
-<div class="row-fluid">
-    <aside class="span3 auction-zone">
+<style type="text/css">
+    #auction-zone {
+        width: 350px;
+        float: left;
+    }
+
+    #auction-list {
+        left: 362px;
+
+    }
+</style>
+
+<div class="row">
+    <aside id="auction-zone" class="menu">
         <header class="flat">
             <h3><span class="icon"><i class="icon-white icon-plus"></i></span> NEW AUCTION</h3>
         </header>
         <div class="auction-form">
-            <form ng-submit="createAuction()">
-                <input class="span12" type="text" ng-model="newAuction.product.name" placeholder="tên sản phẩm" required/>
-                <input class="span12" type="url" ng-model="newAuction.product.imageUrl" placeholder="link hình ảnh" required/>
-                <input class="span12" type="number" ng-model="newAuction.initPrice" placeholder="giá khởi điểm" required/>
-                <input class="span12" type="number" ng-model="newAuction.minStep" placeholder="min step" required/>
-                <input class="span12" type="date" ng-model="newAuction.endTime" placeholder="Thời gian kết thúc" required/>
-                <input class="span12" type="date" ng-model="newAuction.startTime" placeholder="Thời gian bắt đầu"/>
+            <div ng-init="page=0">
 
-                <input type="submit" value="Tạo đấu giá" class="btn btn-primary"/>
-            </form>
+                <form ng-show="page == 0" ng-submit="nextPage()">
+                    <input class="span3" type="text" ng-model="newAuction.product.name" placeholder="tên sản phẩm" required/>
+                    <input class="span3" type="url" ng-model="newAuction.product.imageUrl" placeholder="link hình ảnh" required/>
+                    <input class="span3" type="number" ng-model="newAuction.initPrice" placeholder="giá khởi điểm" required/>
+                    <input class="span3" type="number" ng-model="newAuction.minStep" placeholder="min step" required/>
+                    <br>
+                    <button class="btn btn-primary" ng-click="">Tạo đấu giá</button>
+                </form>
+
+                <form ng-show="page == 1">
+                    <label>Thời gian kết thúc: {{ newAuction.endTime | date:'yyyy-MM-dd hh:mm' }}</label>
+                    <label>
+                        chọn ngày
+                    </label>
+                    <datepicker ng-model="newAuction.endTime" show-weeks="false" starting-day="1" max="'2015-06-22'"></datepicker>
+                    <label>
+                        chọn giờ
+                    </label>
+                    <timepicker ng-model="newAuction.endTime" hour-step="1" minute-step="15" show-meridian="true"></timepicker>
+                    <br>
+                    <a class="btn" ng-click="goBack()">quay lại</a>
+                    <button class="btn btn-primary" ng-click="nextPage()">next</button>
+                </form>
+
+                <form ng-show="page==2" ng-submit="createAuction()">
+                    <input type="submit" value="Tạo đấu giá" class="btn btn-primary"/>
+                </form>
+
+
+
+
+                <!--<input class="span12" type="date" ng-model="newAuction.startTime" placeholder="Thời gian bắt đầu"/>-->
+
+
+            </div>
         </div>
     </aside>
-    <div class="span9 pull-right">
+    <div class="" id="auction-list">
         <header class="flat">
             <h3><span class="title">Danh sách Đấu giá</span></h3>
+            <span> {{ serverValues.timestamp }}</span>
         </header>
 
         <div class="row-fluid">
@@ -26,8 +66,8 @@
                 <li class="span4" ng-repeat="auction in auctions">
                     <div class="auction">
                         <img ng-src="{{ auction.product.imageUrl }}" alt=""/>
-                        <!--<p class="time">{{ auction.endTime }}</p>-->
-                        <p class="time">00:13:09</p>
+                        <p class="time">{{ (auction.endTime ) | date:"hh:mm:ss"}}</p>
+                        <!--<p class="time">00:13:09</p>-->
                     </div>
                 </li>
             </ul>
