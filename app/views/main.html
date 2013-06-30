@@ -24,11 +24,10 @@
         <div class="row-fluid">
             <ul class="auction-list thumbnails">
                 <li class="span4" ng-repeat="auction in auctions">
-                    <div class="">
+                    <div class="auction">
                         <img ng-src="{{ auction.product.imageUrl }}" alt=""/>
-                        <p>{{ auction.product.name }}</p>
-                        <p>{{ auction.initPrice }}</p>
-                        <p>{{ auction.endTime }}</p>
+                        <!--<p class="time">{{ auction.endTime }}</p>-->
+                        <p class="time">00:13:09</p>
                     </div>
                 </li>
             </ul>
