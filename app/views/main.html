@@ -1,77 +1,180 @@
 <style type="text/css">
-    #auction-zone {
+    #menu-container {
+        position: fixed;
+        top: 72px;
+        left: -312px;
         width: 350px;
+        background: white;
+        -webkit-transition: left .3s linear;
+    }
+
+    .menu-open #menu-container {
+        left: 12px;
+    }
+
+    #menu-container section {
+        height: 41px;
+        overflow: hidden;
+    }
+
+    .menu-open #menu-container section {
+        height: 600px;
+
+    }
+
+    #menu-container header .icon {
+        margin-right: 0;
+        float: right;
+        display: block;
+        cursor: pointer;
+    }
+
+
+
+    .menu-open #menu-container header .icon {
+        margin-right: 20px;
         float: left;
     }
 
-    #auction-list {
-        left: 362px;
+    #menu-container:hover {
+        /*background: gray;*/
+    }
 
+    .menu-open #menu-container {
+        /*-webkit-transition: background 1s linear 1s;*/
+    }
+
+    .menu-open #menu-container:hover {
+        background: white;
+    }
+
+    #auction-list {
+        position: relative;
+        top: 12px;
+        left: 50px;
+        right: 0;
+        z-index: 10;
+        background: white;
+    }
+
+    #main-view {
+        position: absolute;
+        left: 0;
+        top: 60px;
+        width: 100%;
+        height: 100%;
+        -webkit-transition: left .3s linear;
+    }
+
+    #main-view.menu-open {
+        left: 330px;
     }
 </style>
 
-<div class="row">
-    <aside id="auction-zone" class="menu">
-        <header class="flat">
-            <h3><span class="icon"><i class="icon-white icon-plus"></i></span> NEW AUCTION</h3>
-        </header>
-        <div class="auction-form">
-            <div ng-init="page=0">
+<div id="main-view" class="" ng-class="{'menu-open': menuShown}">
+    <aside id="menu-container" class="menu"
+           ng-init="menuShown = false">
 
-                <form ng-show="page == 0" ng-submit="nextPage()">
-                    <input class="span3" type="text" ng-model="newAuction.product.name" placeholder="tên sản phẩm" required/>
-                    <input class="span3" type="url" ng-model="newAuction.product.imageUrl" placeholder="link hình ảnh" required/>
-                    <input class="span3" type="number" ng-model="newAuction.initPrice" placeholder="giá khởi điểm" required/>
-                    <input class="span3" type="number" ng-model="newAuction.minStep" placeholder="min step" required/>
-                    <br>
-                    <button class="btn btn-primary" ng-click="">Tạo đấu giá</button>
-                </form>
+        <section>
+            <header class="flat">
+                <h3>
+                    <span class="icon" ng-click="menuShown = !menuShown">
+                        <i class="icon-white icon-plus"></i>
+                    </span>
+                    NEW AUCTION
+                </h3>
+            </header>
+            <div class="auction-form">
+                <div ng-init="page=0">
 
-                <form ng-show="page == 1">
-                    <label>Thời gian kết thúc: {{ newAuction.endTime | date:'yyyy-MM-dd hh:mm' }}</label>
-                    <label>
-                        chọn ngày
-                    </label>
-                    <datepicker ng-model="newAuction.endTime" show-weeks="false" starting-day="1" max="'2015-06-22'"></datepicker>
-                    <label>
-                        chọn giờ
-                    </label>
-                    <timepicker ng-model="newAuction.endTime" hour-step="1" minute-step="15" show-meridian="true"></timepicker>
-                    <br>
-                    <a class="btn" ng-click="goBack()">quay lại</a>
-                    <button class="btn btn-primary" ng-click="nextPage()">next</button>
-                </form>
+                    <form ng-show="page == 0" ng-submit="nextPage()">
+                        <input class="span3" type="text" ng-model="newAuction.product.name" placeholder="tên sản phẩm"
+                               required/>
+                        <input class="span3" type="url" ng-model="newAuction.product.imageUrl"
+                               placeholder="link hình ảnh"
+                               required/>
+                        <input class="span3" type="number" ng-model="newAuction.initPrice" placeholder="giá khởi điểm"
+                               required/>
+                        <input class="span3" type="number" ng-model="newAuction.minStep" placeholder="min step"
+                               required/>
+                        <br>
+                        <button class="btn btn-primary" ng-click="">Tạo đấu giá</button>
+                    </form>
 
-                <form ng-show="page==2" ng-submit="createAuction()">
-                    <input type="submit" value="Tạo đấu giá" class="btn btn-primary"/>
-                </form>
+                    <form ng-show="page == 1">
+                        <label>Thời gian kết thúc: {{ newAuction.endTime | date:'yyyy-MM-dd hh:mm' }}</label>
+                        <label>
+                            chọn ngày
+                        </label>
+                        <datepicker ng-model="newAuction.endTime" show-weeks="false" starting-day="1"
+                                    max="'2015-06-22'"></datepicker>
+                        <label>
+                            chọn giờ
+                        </label>
+                        <timepicker ng-model="newAuction.endTime" hour-step="1" minute-step="15"
+                                    show-meridian="true"></timepicker>
+                        <br>
+                        <a class="btn" ng-click="goBack()">quay lại</a>
+                        <button class="btn btn-primary" ng-click="nextPage()">next</button>
+                    </form>
+
+                    <form ng-show="page==2" ng-submit="createAuction()">
+                        <input type="submit" value="Tạo đấu giá" class="btn btn-primary"/>
+                    </form>
 
 
+                    <!--<input class="span12" type="date" ng-model="newAuction.startTime" placeholder="Thời gian bắt đầu"/>-->
 
 
-                <!--<input class="span12" type="date" ng-model="newAuction.startTime" placeholder="Thời gian bắt đầu"/>-->
-
-
+                </div>
             </div>
-        </div>
+        </section>
     </aside>
     <div class="" id="auction-list">
-        <header class="flat">
-            <h3><span class="title">Danh sách Đấu giá</span></h3>
-            <span> {{ serverValues.timestamp }}</span>
-        </header>
 
-        <div class="row-fluid">
-            <ul class="auction-list thumbnails">
-                <li class="span4" ng-repeat="auction in auctions">
-                    <div class="auction">
-                        <img ng-src="{{ auction.product.imageUrl }}" alt=""/>
-                        <p class="price">{{ auction.initPrice }}</p>
-                        <!--<p class="time">{{ auction.endTime }}</p>-->
-                        <p class="time">00:13:09</p>
-                    </div>
-                </li>
-            </ul>
-        </div>
+        <section class="ongoing-auctions">
+            <header class="flat">
+                <h3><span class="title">Đang diễn ra</span></h3>
+            </header>
+
+            <div class="row-fluid">
+                <ul class="auction-list thumbnails">
+                    <li class="span3" ng-repeat="auction in ongoing()">
+                        <div class="auction">
+                            <img ng-src="{{ auction.product.imageUrl }}" alt=""/>
+
+                            <p class="price">{{ auction.initPrice }}</p>
+                            <p class="auction-name">{{ auction.product.name }}</p>
+                            <p class="time">{{ timeLeftString(auction) }}</p>
+                            <!--<p class="time">00:13:09</p>-->
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="ongoing-auctions">
+            <header class="flat">
+                <h3><span class="title">Đã xong</span></h3>
+            </header>
+
+            <div class="row-fluid">
+                <ul class="auction-list thumbnails">
+                    <li class="span3" ng-repeat="auction in done()">
+                        <div class="auction">
+                            <img ng-src="{{ auction.product.imageUrl }}" alt=""/>
+
+                            <p class="price">{{ auction.initPrice }}</p>
+                            <p class="auction-name">{{ auction.product.name }}</p>
+
+                            <p class="time">{{ timeLeftString(auction) }}</p>
+                            <!--<p class="time">00:13:09</p>-->
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+
     </div>
 </div>
