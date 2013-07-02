@@ -95,14 +95,10 @@ angular.module('vnbidding.github.ioApp')
       ref.on('child_added', function (data, prevId) {
         $timeout(function () {
 
-          console.log('child_added', data, prevId);
-
           var item = data.val()
             , priority = data.getPriority()
             , id = data.name()
             , ref = data.ref();
-
-          console.log(prevId);
 
           var model = new collection._ctor(item);
           model['.priority'] = priority;
@@ -118,8 +114,6 @@ angular.module('vnbidding.github.ioApp')
 
       ref.on('child_changed', function (data, prevId) {
         $timeout(function () {
-
-          console.log('child_changed', data, prevId);
 
           var id = data.name()
             , priority = data.getPriority()
@@ -137,8 +131,6 @@ angular.module('vnbidding.github.ioApp')
 
       ref.on('child_moved', function (data, prevId) {
         $timeout(function () {
-          console.log('child_moved', data, prevId);
-
           var id = data.name()
             , priority = data.getPriority()
             , model = _.find(collection._collection, function (model) {

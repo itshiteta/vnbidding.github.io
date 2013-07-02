@@ -5,6 +5,7 @@ a {
 
 body {
     background: #F2F2F2;
+    overflow-x: hidden;
 }
 
 .vnb-header {
@@ -110,8 +111,8 @@ header.flat .title {
 }
 
 .auction-list li {
-    margin: 0 6px 24px 6px !important;
-    border-bottom: 1px solid #DDDDDD;
+    margin: 0 10px 24px 0px !important;
+    /*border-bottom: 1px solid #DDDDDD;*/
 }
 
 .auction-list .auction > img {
@@ -123,22 +124,27 @@ header.flat .title {
     padding: 0 10px;
     margin: 0;
     font-weight: 200;
-    background: #FFFFFF;
+    background: #DDDDDD;
 }
 
 .auction-list .auction .auction-name {
     color: #95A5A6;
     font-size: 11px;
+    line-height: 11px;
+    padding-bottom: 4px;
+    text-align: right;
 }
 
-.auction-list .auction .auction-name:before {
+.auction-list .auction .auction-name:after {
     content: '\2014 \00A0';
 }
 
 .auction-list .auction .auction-price {
     color: #2C3E50;
     font-size: 1.5em;
-    padding-top: 10px;
+    font-weight: 500;
+    padding: 15px 0px 0px 70px;
+    text-align: left;
 }
 
 .auction-list .auction .auction-time {
@@ -147,7 +153,7 @@ header.flat .title {
     font-weight: 100;
     font-size: 3em;
     position: absolute;
-    bottom: 50px;
+    top: 80px;
     right: 0;
     padding: 10px 0;
     width: 100%;
@@ -160,14 +166,42 @@ header.flat .title {
 
 .auction-list .auction .auction-bid {
     position: absolute;
+    padding: 0;
     bottom: 0;
-    right: 0;
+    left: 0;
+    height: 50px;
+    width: 60px;
+}
+.auction-list .auction .auction-bid a {
+    background: #c6c6c6 url(../img/icon-bid-32.png) no-repeat 50%;
+    position: relative;
+    width: 50px;
+    height: 50px;
+    display: block;
+}
+.auction-list .auction .auction-bid a:hover {
+    cursor: pointer;
+    background: #3498DB;
+}
+.auction-list .auction .auction-bid a i {
+    display: block;
+    position: absolute;
+    top: 15px;
+    right: -10px;
+}
+
+.arrow-right {
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left:10px solid #c6c6c6;
 }
 
 /* Button */
 .btn {
     background: #3498DB;
-    border: 1px solid #ddd;
+    border: 0;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
@@ -213,8 +247,7 @@ input[type="color"],
     top: 72px;
     left: -316px;
     width: 350px;
-    background: white;
-    -webkit-transition: left .3s linear;
+    -webkit-transition: left .2s linear;
 }
 
 .menu-open #menu-container {
@@ -252,7 +285,6 @@ input[type="color"],
 }
 
 .menu-open #menu-container:hover {
-    background: white;
 }
 
 #auction-list {
@@ -261,7 +293,6 @@ input[type="color"],
     left: 50px;
     right: 0;
     z-index: 10;
-    background: white;
 }
 
 #main-view {
@@ -270,9 +301,10 @@ input[type="color"],
     top: 60px;
     width: 100%;
     height: 100%;
-    -webkit-transition: left .3s linear;
+    -webkit-transition: left .2s linear;
 }
 
 #main-view.menu-open {
     left: 330px;
 }
+
