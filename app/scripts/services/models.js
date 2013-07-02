@@ -36,7 +36,7 @@ angular.module('vnbidding.github.ioApp')
 
         auction.createdTime = Firebase.ServerValue.TIMESTAMP;
         auction.endTime = new Date(auction.endTime).getTime();
-        if(auction.startTime) {
+        if (auction.startTime) {
           auction.startTime = new Date(auction.startTime).getTime();
         }
 
@@ -77,4 +77,82 @@ angular.module('vnbidding.github.ioApp')
       config: config,
       Auction: Auction
     }
+  })
+
+
+  .factory('Collection', function ($timeout) {
+    function Collection(ref, model) {
+      var collection = this;
+      this._collection = [];
+      this._ctor = model;
+
+      if (typeof ref == "string") {
+        ref = new Firebase(ref);
+      }
+
+      this._ref = ref;
+
+      ref.on('child_added', function (data, prevId) {
+        $timeout(function () {
+
+          console.log('child_added', data, prevId);
+
+          var item = data.val()
+            , priority = data.getPriority()
+            , id = data.name()
+            , ref = data.ref();
+
+          console.log(prevId);
+
+          var model = new collection._ctor(item);
+          model['.priority'] = priority;
+          model.$id = id;
+          model.$ref = ref;
+
+          collection._collection.push(model);
+          collection._collection = _.sortBy(collection._collection, function (model) {
+            return model['.priority'];
+          })
+        });
+      });
+
+      ref.on('child_changed', function (data, prevId) {
+        $timeout(function () {
+
+          console.log('child_changed', data, prevId);
+
+          var id = data.name()
+            , priority = data.getPriority()
+            , model = _.find(collection._collection, function (model) {
+              return model.$id === id;
+            });
+
+          _.extend(model, data.val());
+          model['.priority'] = priority;
+//          collection._collection = _.sortBy(collection._collection, function (model) {
+//            return model['.priority'];
+//          })
+        });
+      });
+
+      ref.on('child_moved', function (data, prevId) {
+        $timeout(function () {
+          console.log('child_moved', data, prevId);
+
+          var id = data.name()
+            , priority = data.getPriority()
+            , model = _.find(collection._collection, function (model) {
+              return model.$id === id;
+            });
+
+          model['.priority'] = priority;
+          collection._collection = _.sortBy(collection._collection, function (model) {
+            return model['.priority'];
+          });
+        });
+      })
+    }
+
+
+    return Collection;
   });

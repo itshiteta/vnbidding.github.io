@@ -1,18 +1,18 @@
 'use strict';
 
 angular.module('vnbidding.github.ioApp')
-  .controller('MainCtrl', function ($scope, auth, models) {
+  .controller('MainCtrl', function ($scope, auth, models, Collection) {
 
-  
+    $scope.test = new Collection(models.config.refUrls.auctions, models.Auction);
 
     $scope.auctions = models.Auction.get();
 
     $scope.done = function () {
-      return _.filter($scope.auctions, $scope.checkDone);
+      return _.filter($scope.test._collection, $scope.checkDone);
     };
 
     $scope.ongoing = function () {
-      return _.reject($scope.auctions, $scope.checkDone);
+      return _.reject($scope.test._collection, $scope.checkDone);
     };
 
 
@@ -73,7 +73,6 @@ angular.module('vnbidding.github.ioApp')
     };
 
     $scope.checkDone = function (auction) {
-      console.log(auction.endTime);
       var serverTimestamp = models.config.serverValues.timestamp
         , endTime = auction.endTime;
 
