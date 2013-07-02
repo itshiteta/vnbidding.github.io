@@ -90,6 +90,7 @@ header.flat .icon {
     padding: 5px 10px;
     margin-right: 20px;
 }
+
 header.flat .title {
     float: left;
     background: #2C3E50;
@@ -100,46 +101,68 @@ header.flat .title {
 .auction-list {
     margin-top: 20px;
 }
+
 .auction-list .auction {
     background: #ffffff;
     text-align: center;
     position: relative;
+    border: 1px solid #DDDDDD;
 }
+
 .auction-list li {
     margin: 0 6px 24px 6px !important;
     border-bottom: 1px solid #DDDDDD;
 }
-.auction-list .auction > img{
-    height: 200px;
+
+.auction-list .auction > img {
+    max-height: 200px;
 }
+
 .auction-list .auction p {
     text-align: left;
-    padding: 10px;
+    padding: 0 10px;
     margin: 0;
     font-weight: 200;
+    background: #FFFFFF;
 }
-.auction-list .auction .name {
+
+.auction-list .auction .auction-name {
+    color: #95A5A6;
+    font-size: 11px;
+}
+
+.auction-list .auction .auction-name:before {
+    content: '\2014 \00A0';
+}
+
+.auction-list .auction .auction-price {
     color: #2C3E50;
+    font-size: 1.5em;
+    padding-top: 10px;
 }
-.auction-list .auction .price {
-    background: #2ECC71;
-    color: #f2f2f2;
-    position: absolute;
-    position: absolute;
-    right: 0;
-    bottom: 40px;
-    width: 140px;
-}
-.auction-list .auction .time {
-    background: #2C3E50;
-    color: #F2F2F2;
+
+.auction-list .auction .auction-time {
+    background: rgba(44, 62, 80, 0.3);
+    color: #dddddd;
     font-weight: 100;
-    font-size: 2em;
+    font-size: 3em;
+    position: absolute;
+    bottom: 50px;
+    right: 0;
+    padding: 10px 0;
+    width: 100%;
+    text-align: center;
 }
-.auction-list .auction:hover {
 
+.auction-list .auction:hover .auction-time {
+    background: rgba(44, 62, 80, 0.5);
 }
 
+.auction-list .auction .auction-bid {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
 
 /* Button */
 .btn {
@@ -183,4 +206,73 @@ input[type="color"],
     border: 1px solid #dddddd;
     height: 40px;
     font-weight: 200;
+}
+
+#menu-container {
+    position: fixed;
+    top: 72px;
+    left: -316px;
+    width: 350px;
+    background: white;
+    -webkit-transition: left .3s linear;
+}
+
+.menu-open #menu-container {
+    left: 0px;
+}
+
+#menu-container section {
+    height: 41px;
+    overflow: hidden;
+}
+
+.menu-open #menu-container section {
+    height: 600px;
+
+}
+
+#menu-container header .icon {
+    margin-right: 0;
+    float: right;
+    display: block;
+    cursor: pointer;
+}
+
+.menu-open #menu-container header .icon {
+    margin-right: 20px;
+    float: left;
+}
+
+#menu-container:hover {
+    /*background: gray;*/
+}
+
+.menu-open #menu-container {
+    /*-webkit-transition: background 1s linear 1s;*/
+}
+
+.menu-open #menu-container:hover {
+    background: white;
+}
+
+#auction-list {
+    position: relative;
+    top: 12px;
+    left: 50px;
+    right: 0;
+    z-index: 10;
+    background: white;
+}
+
+#main-view {
+    position: absolute;
+    left: 0;
+    top: 60px;
+    width: 100%;
+    height: 100%;
+    -webkit-transition: left .3s linear;
+}
+
+#main-view.menu-open {
+    left: 330px;
 }

@@ -1,76 +1,3 @@
-<style type="text/css">
-    #menu-container {
-        position: fixed;
-        top: 72px;
-        left: -312px;
-        width: 350px;
-        background: white;
-        -webkit-transition: left .3s linear;
-    }
-
-    .menu-open #menu-container {
-        left: 12px;
-    }
-
-    #menu-container section {
-        height: 41px;
-        overflow: hidden;
-    }
-
-    .menu-open #menu-container section {
-        height: 600px;
-
-    }
-
-    #menu-container header .icon {
-        margin-right: 0;
-        float: right;
-        display: block;
-        cursor: pointer;
-    }
-
-
-
-    .menu-open #menu-container header .icon {
-        margin-right: 20px;
-        float: left;
-    }
-
-    #menu-container:hover {
-        /*background: gray;*/
-    }
-
-    .menu-open #menu-container {
-        /*-webkit-transition: background 1s linear 1s;*/
-    }
-
-    .menu-open #menu-container:hover {
-        background: white;
-    }
-
-    #auction-list {
-        position: relative;
-        top: 12px;
-        left: 50px;
-        right: 0;
-        z-index: 10;
-        background: white;
-    }
-
-    #main-view {
-        position: absolute;
-        left: 0;
-        top: 60px;
-        width: 100%;
-        height: 100%;
-        -webkit-transition: left .3s linear;
-    }
-
-    #main-view.menu-open {
-        left: 330px;
-    }
-</style>
-
 <div id="main-view" class="" ng-class="{'menu-open': menuShown}">
     <aside id="menu-container" class="menu"
            ng-init="menuShown = false">
@@ -142,11 +69,13 @@
                     <li class="span3" ng-repeat="auction in ongoing()">
                         <div class="auction">
                             <img ng-src="{{ auction.product.imageUrl }}" alt=""/>
-
-                            <p class="price">{{ auction.initPrice }}</p>
+                            <p class="auction-price">{{ auction.initPrice }}</p>
                             <p class="auction-name">{{ auction.product.name }}</p>
-                            <p class="time">{{ timeLeftString(auction) }}</p>
-                            <!--<p class="time">00:13:09</p>-->
+                            <p class="auction-time">{{ timeLeftString(auction) }}</p>
+                            <p class="auction-bid">
+                                <!--<input type="number" ng-model="bidPrice"/>-->
+                                <a class="btn flat">Bid</a>
+                            </p>
                         </div>
                     </li>
                 </ul>

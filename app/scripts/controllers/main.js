@@ -50,7 +50,7 @@ angular.module('vnbidding.github.ioApp')
       min = min < 10 ? ('0' + min) : min;
       second = second < 10 ? ('0' + second) : second;
 
-      return 'Còn lại: ' + [hours,min,second].join(':');
+      return [hours,min,second].join(':');
     };
 
     $scope.timeLeftString = function (auction) {
@@ -69,7 +69,7 @@ angular.module('vnbidding.github.ioApp')
       min = min < 10 ? ('0' + min) : min;
       second = second < 10 ? ('0' + second) : second;
 
-      return 'Còn lại: ' + [hours,min,second].join(':');
+      return [hours,min,second].join(':');
     };
 
     $scope.checkDone = function (auction) {
