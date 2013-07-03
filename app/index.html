@@ -37,16 +37,10 @@
             <li><a href="/"><img src="img/logo.png" alt="vnbidding.com"/></a></li>
         </ul>
         <ul class="nav info pull-right">
-            <li ng-show="!user.username">
-                <a class="login" ng-click="auth.login('facebook')">
-                    <img src="img/facebook.png" alt="Đăng nhập với Facebook"/>
-                    <small>Đăng nhập với Facebook</small>
-                </a>
-            </li>
             <li ng-show="!!user.username">
                 <a class="profile">
                     <img ng-src="http://graph.facebook.com/{{ user.username }}/picture" alt="{{ user.name }}"/>
-                    <small>{{ user.name }}</small>
+                    <small>{{ user.name }}, <a class="span1" ng-click="auth.logout()">thoát</a></small>
                 </a>
             </li>
         </ul>

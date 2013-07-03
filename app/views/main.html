@@ -8,12 +8,11 @@
                     <span class="icon" ng-click="menuShown = !menuShown">
                         <i class="icon-white icon-plus"></i>
                     </span>
-                    NEW AUCTION
+                    Tạo đấu giá mới
                 </h3>
             </header>
-            <div class="auction-form">
+            <div class="auction-form" ng-show="!!user.username">
                 <div ng-init="page=0">
-
                     <form ng-show="page == 0" ng-submit="nextPage()">
                         <input class="span3" type="text" ng-model="newAuction.product.name" placeholder="tên sản phẩm"
                                required/>
@@ -49,11 +48,38 @@
                         <input type="submit" value="Tạo đấu giá" class="btn btn-primary"/>
                     </form>
 
-
-                    <!--<input class="span12" type="date" ng-model="newAuction.startTime" placeholder="Thời gian bắt đầu"/>-->
-
-
                 </div>
+            </div>
+            <div class="login-form" ng-show="!user.username">
+                <p>Vui lòng đăng nhập để sử dụng chức năng này</p>
+
+                <form>
+                    <div class="control-group">
+                        <div class="controls">
+                            <input type="text" id="inputEmail" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <input type="password" id="inputPassword" placeholder="Password">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label class="checkbox">
+                                <input type="checkbox"> Remember me
+                            </label>
+                            <button type="submit" class="btn">Đăng nhập</button>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <a class="btn btn-facebook" ng-click="auth.login('facebook')">
+                                Đăng nhập với Facebook
+                            </a>
+                        </div>
+                    </div>
+                </form>
             </div>
         </section>
     </aside>

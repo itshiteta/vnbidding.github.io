@@ -1,6 +1,12 @@
 /* Will be compiled down to a single stylesheet with your sass files */
-a {
+a, a:link, a:visited, a:hover, a:active {
     text-shadow: none !important;
+    -webkit-text-shadow: none !important;
+    -moz-text-shadow: none !important;
+}
+a:hover {
+    color: #808080;
+    /*cursor: pointer !important;*/
 }
 
 body {
@@ -63,7 +69,7 @@ body {
     height: auto;
 }
 
-.auction-form {
+.auction-form, .login-form {
     padding: 20px 30px;
 }
 
@@ -207,6 +213,9 @@ header.flat .title {
     box-shadow: none;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
+    text-shadow: none;
+    -webkit-text-shadow: none;
+    -moz-text-shadow: none;
     border-radius: 0;
     margin: 0 !important;
     padding: 4px 12px !important;
@@ -306,5 +315,15 @@ input[type="color"],
 
 #main-view.menu-open {
     left: 330px;
+}
+
+.btn-facebook {
+    background: #3b5a97 url(../img/facebook.png) no-repeat 0 50%;
+    color: #FFFFFF;
+    padding-left: 24px !important;
+}
+.btn-facebook:hover {
+    background: #3b5a97 url(../img/facebook.png) no-repeat 0 50%;
+    color: #F2F2F2;
 }
 
