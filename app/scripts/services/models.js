@@ -42,19 +42,19 @@ angular.module('vnbidding.github.ioApp')
           auction.startTime = new Date(auction.startTime).getTime();
         }
 
-        Auctions.add(auction).then(function (data) {
-          data.ref.setPriority(data.snapshot.val().createdTime * -1);
-        });
-
-//        var aRef = AuctionRef.add(auction, function () {
-//          aRef.once('value', function (snapshot) {
-//            var item = snapshot.val();
-//
-//            aRef.setPriority(item.createdTime * (-1));
-//          });
-//
-//          safeApply();
+//        Auctions.add(auction).then(function (data) {
+//          data.ref.setPriority(data.snapshot.val().createdTime * -1);
 //        });
+
+        var aRef = AuctionRef.add(auction, function () {
+          aRef.once('value', function (snapshot) {
+            var item = snapshot.val();
+
+            aRef.setPriority(item.createdTime * (-1));
+          });
+
+          safeApply();
+        });
         ProductRef.add(product);
       }
     };
