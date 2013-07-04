@@ -28,6 +28,9 @@ angular.module('vnbidding.github.ioApp')
     }
 
     Auction.prototype = {
+      toObject: function () {
+        return angular.fromJson( angular.toJson(this));
+      },
       create: function () {
         var auction = this
           , product = auction.product;
@@ -36,25 +39,19 @@ angular.module('vnbidding.github.ioApp')
           throw 'Product should not be NULL';
         }
 
-        auction.createdTime = Firebase.ServerValue.TIMESTAMP;
         auction.endTime = new Date(auction.endTime).getTime();
         if (auction.startTime) {
           auction.startTime = new Date(auction.startTime).getTime();
         }
 
-        Auctions.add(auction).then(function (data) {
-          data.ref.setPriority(data.snapshot.val().createdTime * -1);
+        Auctions.add(auction, {createdTime: 'TIMESTAMP'}).then(function (data) {
+          if(!auction.startTime) {
+            auction.startTime = auction.createdTime;
+          }
+
+          data.ref.setWithPriority(auction.toObject(), auction.createdTime * -1);
         });
 
-//        var aRef = AuctionRef.add(auction, function () {
-//          aRef.once('value', function (snapshot) {
-//            var item = snapshot.val();
-//
-//            aRef.setPriority(item.createdTime * (-1));
-//          });
-//
-//          safeApply();
-//        });
         ProductRef.add(product);
       }
     };
@@ -202,6 +199,7 @@ angular.module('vnbidding.github.ioApp')
         }
 
         ref.once('value', function (data) {
+          angular.extend(model, data.val());
           defer.resolve({snapshot: data , ref: ref});
         });
 
