@@ -3,16 +3,15 @@
 angular.module('vnbidding.github.ioApp')
   .controller('MainCtrl', function ($scope, auth, models, Collection) {
 
-    $scope.test = new Collection(models.config.refUrls.auctions, models.Auction);
 
     $scope.auctions = models.Auction.get();
 
     $scope.done = function () {
-      return _.filter($scope.test._collection, $scope.checkDone);
+      return _.filter($scope.auctions.all(), $scope.checkDone);
     };
 
     $scope.ongoing = function () {
-      return _.reject($scope.test._collection, $scope.checkDone);
+      return _.reject($scope.auctions.all(), $scope.checkDone);
     };
 
 
@@ -23,8 +22,6 @@ angular.module('vnbidding.github.ioApp')
       $scope.newAuction = null;
       $scope.page = 0;
     };
-
-    $scope.serverValues = models.config.serverValues;
 
     $scope.nextPage = function () {
       $scope.page++;
@@ -53,30 +50,8 @@ angular.module('vnbidding.github.ioApp')
       return [hours,min,second].join(':');
     };
 
-    $scope.timeLeftString = function (auction) {
-      var serverTimestamp = models.config.serverValues.timestamp
-        , endTime = auction.endTime
-        , diff = endTime - serverTimestamp
-        , hours = ~~(diff / (1000 * 60 * 60))
-        , date = new Date(diff)
-        , min = date.getMinutes()
-        , second = date.getSeconds();
-
-      if(hours < 0) {
-        return 'deal done';
-      }
-
-      min = min < 10 ? ('0' + min) : min;
-      second = second < 10 ? ('0' + second) : second;
-
-      return [hours,min,second].join(':');
-    };
-
     $scope.checkDone = function (auction) {
-      var serverTimestamp = models.config.serverValues.timestamp
-        , endTime = auction.endTime;
-
-      return endTime < serverTimestamp;
+      return auction.isDone();
     };
 
   });

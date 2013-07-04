@@ -29,7 +29,16 @@ angular.module('vnbidding.github.ioApp')
 
     Auction.prototype = {
       toObject: function () {
-        return angular.fromJson( angular.toJson(this));
+        var copy = {};
+
+        angular.forEach(this, function (value, key) {
+          if (key.indexOf("$") !== 0) {
+            copy[key] = value;
+          }
+        });
+
+        // remove all method from prototype
+        return angular.fromJson( angular.toJson(copy));
       },
       create: function () {
         var auction = this
@@ -39,6 +48,8 @@ angular.module('vnbidding.github.ioApp')
           throw 'Product should not be NULL';
         }
 
+        auction.currentPrice = auction.initPrice;
+        auction.bids = [];
         auction.endTime = new Date(auction.endTime).getTime();
         if (auction.startTime) {
           auction.startTime = new Date(auction.startTime).getTime();
@@ -55,11 +66,63 @@ angular.module('vnbidding.github.ioApp')
         });
 
         ProductRef.add(product);
+      },
+
+      bid: function (inc) {
+        var auction = this;
+
+        // do something with auction
+
+        Auctions.update(this.$id);
+      },
+
+      getTimeLeft: function () {
+        var timestamp = Date.now() + (config.serverValues.timeOffset)
+          , endTime = this.endTime
+          , diff = endTime - timestamp
+          , date = new Date(diff)
+          , hours = ~~(diff / (1000 * 60 * 60))
+          , min = date.getMinutes()
+          , second = date.getSeconds();
+
+        if(diff < 15000) {
+          return 'Đã xong';
+        }
+
+        if(diff < 0) {
+          return 'Vửa xong';
+        }
+
+        if(hours > 36) {
+          setTimeout(safeApply, 60 * 60 * 1000); // 1 tiếng update 1 lần
+          return ~~(hours / 24) + ' ngày';
+        }
+
+        if(hours > 1) {
+          setTimeout(safeApply, 60 * 1000); // 1 phút update 1 lần
+          return hours + ' tiếng';
+        }
+
+        if(min >= 10) {
+          setTimeout(safeApply, 30 * 1000); // 30 giây update 1 lần
+          return min + ' phút';
+        }
+
+        second = second < 10 ? ('0' + second) : second;
+        setTimeout(safeApply, 1000); // 1 giây update 1 lần
+        return '0:0' + min + ':' + second;
+
+      },
+      isDone: function () {
+        var timestamp = Date.now() + (config.serverValues.timeOffset)
+          , endTime = this.endTime;
+
+        return endTime < timestamp;
       }
     };
 
     Auction.get = function () {
-      return AuctionRef;
+      return Auctions;
     };
 
     var clock = new Firebase(config.refUrls.clockSkew);
@@ -68,14 +131,6 @@ angular.module('vnbidding.github.ioApp')
       config.serverValues.timeOffset = offset;
       safeApply();
     });
-
-    function checkClock() {
-      config.serverValues.timestamp = Date.now() + (config.serverValues.timeOffset);
-      safeApply();
-      $timeout(checkClock, 1000);
-    }
-
-    checkClock();
 
 
     return  {
@@ -98,9 +153,10 @@ angular.module('vnbidding.github.ioApp')
       this._ref = ref;
 
       function sort() {
-        collection._collection = _.sortBy(collection._collection, function (model) {
+        var sorted = _.sortBy(collection._collection, function (model) {
           return model['.priority'];
         });
+        collection._collection = sorted;
       }
 
       function findById(id) {
@@ -108,6 +164,8 @@ angular.module('vnbidding.github.ioApp')
           return model.$id == id;
         });
       }
+
+      this.findById = findById;
 
       ref.on('child_added', function (data) {
         $timeout(function () {
@@ -170,14 +228,16 @@ angular.module('vnbidding.github.ioApp')
 
       ref.on('child_removed', function (data) {
         $timeout(function () {
-          var id = data.name();
-          collection._collection = _.without(collection._collection, findById(id));
+          var id = data.name()
+            , without = _.without(collection._collection, findById(id));
+          collection._collection = without;
         })
       });
     }
 
     Collection.prototype = {
       add: function (model, serverValues, priority) {
+
         var collectionRef = this._ref
           , collection = this
           , defer = $q.defer()
@@ -205,7 +265,30 @@ angular.module('vnbidding.github.ioApp')
           defer.resolve({snapshot: data , ref: ref});
         });
 
+
         return promise;
+      },
+
+      update : function (idOrModel) {
+        var id = (typeof idOrModel == 'string') ? idOrModel : idOrModel.$id
+          , model = this.findById(id)
+          , copy = model.toObject()
+          , defer = $q.defer()
+          , promise = defer.promise;
+
+        model.$ref.set(copy);
+        model.$ref.once('value', function (data) {
+          defer.resolve({
+            snapshot : data,
+            ref : model.$ref
+          });
+        });
+
+        return promise;
+      },
+
+      all: function () {
+        return this._collection;
       }
     };
 
