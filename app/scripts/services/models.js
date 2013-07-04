@@ -44,7 +44,9 @@ angular.module('vnbidding.github.ioApp')
           auction.startTime = new Date(auction.startTime).getTime();
         }
 
-        Auctions.add(auction, {createdTime: 'TIMESTAMP'}).then(function (data) {
+        Auctions
+          .add(auction, {createdTime: 'TIMESTAMP'})
+          .then(function (data) {
           if(!auction.startTime) {
             auction.startTime = auction.createdTime;
           }

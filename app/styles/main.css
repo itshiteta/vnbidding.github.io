@@ -31,15 +31,15 @@ body {
 }
 
 .vnb-header .info {
-    padding: 15px;
+    padding: 20px 15px;
 }
 
 .vnb-header .info a.login, .vnb-header .info a.login:hover,
-.vnb-header .info a.profile {
+.vnb-header .info .profile {
     margin: 0 !important;
     padding: 0 5px 0 0 !important;
-    background: #3b5a97;
     color: #f2f2f2;
+    font-weight: 100;
 }
 
 .vnb-header .info a.profile {
@@ -51,8 +51,8 @@ body {
     color: #FFFFFF;
 }
 
-.vnb-header .info a img {
-    width: 26px;
+.vnb-header .info .profile img {
+    width: 24px;
 }
 
 .vnb-container {
@@ -187,7 +187,7 @@ header.flat .title {
 }
 .auction-list .auction .auction-bid a:hover {
     cursor: pointer;
-    background: #3498DB;
+    background: #3498DB url(../img/icon-bid-32.png) no-repeat 50%;
 }
 .auction-list .auction .auction-bid a i {
     display: block;
@@ -202,6 +202,9 @@ header.flat .title {
     border-top: 10px solid transparent;
     border-bottom: 10px solid transparent;
     border-left:10px solid #c6c6c6;
+}
+.auction-list .auction .auction-bid a:hover .arrow-right {
+    border-left:10px solid #3498DB;
 }
 
 /* Button */
