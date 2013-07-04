@@ -42,19 +42,19 @@ angular.module('vnbidding.github.ioApp')
           auction.startTime = new Date(auction.startTime).getTime();
         }
 
-//        Auctions.add(auction).then(function (data) {
-//          data.ref.setPriority(data.snapshot.val().createdTime * -1);
-//        });
-
-        var aRef = AuctionRef.add(auction, function () {
-          aRef.once('value', function (snapshot) {
-            var item = snapshot.val();
-
-            aRef.setPriority(item.createdTime * (-1));
-          });
-
-          safeApply();
+        Auctions.add(auction).then(function (data) {
+          data.ref.setPriority(data.snapshot.val().createdTime * -1);
         });
+
+//        var aRef = AuctionRef.add(auction, function () {
+//          aRef.once('value', function (snapshot) {
+//            var item = snapshot.val();
+//
+//            aRef.setPriority(item.createdTime * (-1));
+//          });
+//
+//          safeApply();
+//        });
         ProductRef.add(product);
       }
     };
@@ -105,8 +105,8 @@ angular.module('vnbidding.github.ioApp')
       }
 
       function findById(id) {
-        _.find(collection._collection, function (model) {
-          return model.$id === id;
+        return _.find(collection._collection, function (model) {
+          return model.$id == id;
         });
       }
 
@@ -118,12 +118,19 @@ angular.module('vnbidding.github.ioApp')
             , id = data.name()
             , ref = data.ref();
 
-          var model = new collection._ctor(item);
+          var model = findById(id);
+          if(!model) {
+            model = new collection._ctor(item);
+            collection._collection.push(model);
+          }
+
           model['.priority'] = priority;
           model.$id = id;
           model.$ref = ref;
 
-          collection._collection.push(model);
+
+
+
           sort();
         });
       });
@@ -135,6 +142,11 @@ angular.module('vnbidding.github.ioApp')
             , priority = data.getPriority()
             , model = findById(id);
 
+//          if(!model) {
+//            model = new collection._ctor(item);
+//            collection._collection.push(model);
+//          }
+
           _.extend(model, data.val());
           model['.priority'] = priority;
         });
@@ -144,7 +156,13 @@ angular.module('vnbidding.github.ioApp')
         $timeout(function () {
           var id = data.name()
             , priority = data.getPriority()
-            , model = findById(id);
+            , model = findById(id)
+            , item = data.val();
+
+//          if(!model) {
+//            model = new collection._ctor(item);
+//            collection._collection.push(model);
+//          }
 
           model['.priority'] = priority;
           sort();
