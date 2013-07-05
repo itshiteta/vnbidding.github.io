@@ -15,7 +15,7 @@ angular.module('vnbidding.github.ioApp')
       , UserRef = angularFireCollection(new Firebase(config.refUrls.users))
       , ProductRef = angularFireCollection(new Firebase(config.refUrls.products));
 
-    var Auctions = new Collection(config.refUrls.auctions, Auction);
+    var Auctions = Collection(config.refUrls.auctions, Auction);
 
     function findByRef(ref, collectionRef) {
       return _.find(collectionRef, function (item) {
@@ -40,6 +40,19 @@ angular.module('vnbidding.github.ioApp')
         // remove all method from prototype
         return angular.fromJson(angular.toJson(copy));
       },
+      _getBidCollection: function () {
+        return Collection(config.refUrls.auctions + '/' + this.$id + '/bids');
+      },
+      addBid: function (bid) {
+        var bids = this._getBidCollection();
+        return bids.add(bid);
+      },
+
+      getBids: function () {
+        var bids = this._getBidCollection();
+        return bids._collection;
+      },
+
       create: function () {
         var auction = this
           , product = auction.product;
@@ -49,7 +62,6 @@ angular.module('vnbidding.github.ioApp')
         }
 
         auction.currentPrice = auction.initPrice;
-        auction.$bids = new Collection(config.refUrls.auctions + '/' + auction.$id + '/bids');
         auction.endTime = new Date(auction.endTime).getTime();
         if (auction.startTime) {
           auction.startTime = new Date(auction.startTime).getTime();
@@ -88,17 +100,7 @@ angular.module('vnbidding.github.ioApp')
           }
         };
 
-        auction.$bids.add(bidData, auction.currentPrice * -1);
-
-//        console.log(auction.$ref.child('bids'));
-//
-//        var newBid = auction.$ref.child('bids')
-//          .push(bidData);
-//
-//        console.log(newBid.name());
-//
-//        newBid.setPriority(auction.currentPrice);
-
+        auction.addBid(bidData);
         Auctions.update(auction.$id);
       },
 
@@ -167,10 +169,12 @@ angular.module('vnbidding.github.ioApp')
 
 
   .factory('Collection', function ($timeout, $q) {
+    var cached = {};
+
     function Collection(ref, model) {
       var collection = this;
       this._collection = [];
-      this._ctor = model;
+      this._ctor = model || function Model() {};
 
       if (typeof ref == "string") {
         ref = new Firebase(ref);
@@ -302,7 +306,7 @@ angular.module('vnbidding.github.ioApp')
           , defer = $q.defer()
           , promise = defer.promise;
 
-        model.$ref.update(copy);
+        model.$ref.set(copy);
         model.$ref.once('value', function (data) {
           defer.resolve({
             snapshot: data,
@@ -319,5 +323,11 @@ angular.module('vnbidding.github.ioApp')
     };
 
 
-    return Collection;
+    return function (url, model) {
+      if(cached[url]) {
+        return cached[url];
+      }
+
+      return cached[url] = new Collection(url, model);
+    };
   });

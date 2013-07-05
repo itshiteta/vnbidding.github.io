@@ -20,8 +20,8 @@ angular.module('vnbidding.github.ioApp')
     //Bid login auth
     $rootScope.$on("login", function (event, user) {
       $rootScope.user = user;
-      if(!user.username) {
-        user.username = user.email;
+      if(!user.provider == 'password') {
+        user.username = user.name = user.email;
       }
       safeApply($rootScope);
     });

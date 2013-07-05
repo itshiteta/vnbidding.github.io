@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('vnbidding.github.ioApp')
-  .controller('MainCtrl', function ($scope, auth, models, Collection) {
+  .controller('MainCtrl', function ($scope, auth, models) {
 
 
     $scope.auctions = models.Auction.get();
@@ -34,21 +34,6 @@ angular.module('vnbidding.github.ioApp')
       }
     };
 
-    $scope.setToHours = function (ms) {
-      var hours = ~~(ms / (1000 * 60 * 60))
-        , date = new Date(ms)
-        , min = date.getMinutes()
-        , second = date.getSeconds();
-
-      if(hours < 0) {
-        return 'deal done';
-      }
-
-      min = min < 10 ? ('0' + min) : min;
-      second = second < 10 ? ('0' + second) : second;
-
-      return [hours,min,second].join(':');
-    };
 
     $scope.checkDone = function (auction) {
       return auction.isDone();
