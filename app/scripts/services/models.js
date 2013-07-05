@@ -49,6 +49,7 @@ angular.module('vnbidding.github.ioApp')
         }
 
         auction.currentPrice = auction.initPrice;
+        auction.currentBidder = $rootScope.user.name;
         auction.$bids = new Collection(config.refUrls.auctions + '/' + auction.$id + '/bids');
         auction.endTime = new Date(auction.endTime).getTime();
         if (auction.startTime) {
@@ -77,9 +78,10 @@ angular.module('vnbidding.github.ioApp')
         }
 
         auction.currentPrice += inc;
+        auction.currentBidder = $rootScope.user.name;
 
         bidData = {
-          price: inc,
+          price: auction.currentPrice,
           createTime: Date.now() + (config.serverValues.timeOffset),
           user: {
             id: $rootScope.user.id,
@@ -88,16 +90,9 @@ angular.module('vnbidding.github.ioApp')
           }
         };
 
-        auction.$bids.add(bidData, auction.currentPrice * -1);
-
-//        console.log(auction.$ref.child('bids'));
-//
-//        var newBid = auction.$ref.child('bids')
-//          .push(bidData);
-//
-//        console.log(newBid.name());
-//
-//        newBid.setPriority(auction.currentPrice);
+        auction.$ref.child('bids')
+          .push(bidData)
+          .setPriority(auction.currentPrice * -1);
 
         Auctions.update(auction.$id);
       },
@@ -130,8 +125,8 @@ angular.module('vnbidding.github.ioApp')
         }
 
         if (min >= 10) {
-          setTimeout(safeApply, 30 * 1000); // 30 giây update 1 lần
-          return min + ' phút';
+          setTimeout(safeApply, 1000); // 30 giây update 1 lần
+          return '00:' + min + ':' + second;
         }
 
         second = second < 10 ? ('0' + second) : second;
@@ -302,7 +297,7 @@ angular.module('vnbidding.github.ioApp')
           , defer = $q.defer()
           , promise = defer.promise;
 
-        model.$ref.update(copy);
+        model.$ref.set(copy);
         model.$ref.once('value', function (data) {
           defer.resolve({
             snapshot: data,
