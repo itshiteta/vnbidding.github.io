@@ -135,7 +135,7 @@ angular.module('vnbidding.github.ioApp')
 
         if (min >= 10) {
           setTimeout(safeApply, 1000); // 30 giây update 1 lần
-          return '00:' + min + ':' + second;
+          return '0:' + min + ':' + second;
         }
 
         second = second < 10 ? ('0' + second) : second;
