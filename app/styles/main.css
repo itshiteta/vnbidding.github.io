@@ -191,7 +191,7 @@ header.flat .title {
 }
 
 .auction-list .auction .auction-bid a {
-    background: #c6c6c6 url(../img/icon-bid-32.png) no-repeat 50%;
+    background: #c6c6c6 url(../images/icon-bid-32.png) no-repeat 50%;
     width: 30px;
     height: 40px;
 }
@@ -334,13 +334,13 @@ input[type="color"],
 }
 
 .btn-facebook {
-    background: #3b5a97 url(../img/facebook.png) no-repeat 0 50%;
+    background: #3b5a97 url(../images/facebook.png) no-repeat 0 50%;
     color: #FFFFFF;
     padding-left: 24px !important;
 }
 
 .btn-facebook:hover {
-    background: #3b5a97 url(../img/facebook.png) no-repeat 0 50%;
+    background: #3b5a97 url(../images/facebook.png) no-repeat 0 50%;
     color: #F2F2F2;
 }
 

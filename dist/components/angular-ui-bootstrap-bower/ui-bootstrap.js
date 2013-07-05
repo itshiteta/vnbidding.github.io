@@ -280,7 +280,7 @@ angular.module('ui.bootstrap.accordion', ['ui.bootstrap.collapse'])
 
 // Use accordion-heading below an accordion-group to provide a heading containing HTML
 // <accordion-group>
-//   <accordion-heading>Heading containing HTML - <img src="..."></accordion-heading>
+//   <accordion-heading>Heading containing HTML - <images src="..."></accordion-heading>
 // </accordion-group>
 .directive('accordionHeading', function() {
   return {
@@ -584,13 +584,13 @@ angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition'])
   <file name="index.html">
     <carousel>
       <slide>
-        <img src="http://placekitten.com/150/150" style="margin:auto;">
+        <images src="http://placekitten.com/150/150" style="margin:auto;">
         <div class="carousel-caption">
           <p>Beautiful!</p>
         </div>
       </slide>
       <slide>
-        <img src="http://placekitten.com/100/150" style="margin:auto;">
+        <images src="http://placekitten.com/100/150" style="margin:auto;">
         <div class="carousel-caption">
           <p>D'aww!</p>
         </div>
@@ -637,7 +637,7 @@ angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition'])
 <div ng-controller="CarouselDemoCtrl">
   <carousel>
     <slide ng-repeat="slide in slides" active="slide.active">
-      <img ng-src="{{slide.image}}" style="margin:auto;">
+      <images ng-src="{{slide.image}}" style="margin:auto;">
       <div class="carousel-caption">
         <h4>Slide {{$index}}</h4>
         <p>{{slide.text}}</p>
