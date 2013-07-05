@@ -62,6 +62,7 @@ angular.module('vnbidding.github.ioApp')
         }
 
         auction.currentPrice = auction.initPrice;
+        auction.currentBidder = $rootScope.user.name;
         auction.endTime = new Date(auction.endTime).getTime();
         if (auction.startTime) {
           auction.startTime = new Date(auction.startTime).getTime();
@@ -89,9 +90,10 @@ angular.module('vnbidding.github.ioApp')
         }
 
         auction.currentPrice += inc;
+        auction.currentBidder = $rootScope.user.name;
 
         bidData = {
-          price: inc,
+          price: auction.currentPrice,
           createTime: Date.now() + (config.serverValues.timeOffset),
           user: {
             id: $rootScope.user.id,
@@ -132,8 +134,8 @@ angular.module('vnbidding.github.ioApp')
         }
 
         if (min >= 10) {
-          setTimeout(safeApply, 30 * 1000); // 30 giây update 1 lần
-          return min + ' phút';
+          setTimeout(safeApply, 1000); // 30 giây update 1 lần
+          return '00:' + min + ':' + second;
         }
 
         second = second < 10 ? ('0' + second) : second;

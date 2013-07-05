@@ -98,7 +98,7 @@
                             <img ng-src="{{ auction.product.imageUrl }}" alt=""/>
                             <p class="auction-time">{{ auction.getTimeLeft() }}</p>
                             <p class="auction-price">{{ auction.currentPrice }}đ</p>
-                            <p class="auction-top-bider">Đang dẫn đầu: {{ user.name }}</p>
+                            <p class="auction-top-bider">Đang dẫn đầu: {{ auction.currentBidder }}</p>
                             <p class="auction-bid">
                                 <a class="btn" ng-click="auction.bid()"><i class="arrow-left"></i></a>
                             </p>
@@ -121,7 +121,7 @@
                             <img ng-src="{{ auction.product.imageUrl }}" alt=""/>
                             <p class="auction-time">{{ auction.endTime | date:'dd/MM/yyyy hh:mm:ss' }}</p>
                             <p class="auction-price">{{ auction.initPrice }}đ</p>
-                            <p class="auction-top-bider">Người chiến thắng: {{ user.name }}</p>
+                            <p class="auction-top-bider">Người chiến thắng: {{ auction.currentBidder }}</p>
                         </div>
                     </li>
                 </ul>

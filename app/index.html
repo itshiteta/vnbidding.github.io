@@ -33,22 +33,24 @@
 
 <!-- Add your site or application content here -->
 <div class="navbar nav-pills navbar-fixed-top vnb-header">
-        <ul class="nav logo">
-            <li><a href="/"><img src="img/logo.png" alt="vnbidding.com"/></a></li>
-        </ul>
-        <ul class="nav info pull-right">
-            <li ng-show="!!user.username">
+    <ul class="nav logo">
+        <li><a href="/"><img src="img/logo.png" alt="vnbidding.com"/></a></li>
+    </ul>
+    <ul class="nav info pull-right">
+        <li ng-show="!!user.username">
                 <span class="profile">
-                    <img ng-show="user.provider == 'facebook'" ng-src="http://graph.facebook.com/{{ user.username }}/picture" alt="{{ user.name }}"/>
+                    <img ng-show="user.provider == 'facebook'"
+                         ng-src="http://graph.facebook.com/{{ user.username }}/picture" alt="{{ user.name }}"/>
                     <span>{{ user.name || user.email }} <a ng-click="auth.logout()">[ Thoát ]</a></span>
                 </span>
-            </li>
-        </ul>
+        </li>
+    </ul>
 </div>
 <div class="vnb-container" ng-view></div>
 
 <script type='text/javascript' src='https://cdn.firebase.com/v0/firebase.js'></script>
 <script type='text/javascript' src='https://cdn.firebase.com/v0/firebase-auth-client.js'></script>
+<script type='text/javascript' src='https://cdn.firebase.com/v0/firebase-simple-login.js'></script>
 
 <script src="components/jquery/jquery.min.js"></script>
 <script src="components/angular/angular.js"></script>
