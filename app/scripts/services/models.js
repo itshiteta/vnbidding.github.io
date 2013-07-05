@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('vnbidding.github.ioApp')
-  .factory('models', function (angularFire, angularFireCollection, safeApply, $timeout, Collection) {
+  .factory('models', function (angularFire, angularFireCollection, safeApply, $timeout, Collection, $rootScope) {
     var config = {
         refUrls: {
           clockSkew: 'https://bidding.firebaseio.com/.info/serverTimeOffset',
@@ -38,7 +38,7 @@ angular.module('vnbidding.github.ioApp')
         });
 
         // remove all method from prototype
-        return angular.fromJson( angular.toJson(copy));
+        return angular.fromJson(angular.toJson(copy));
       },
       create: function () {
         var auction = this
@@ -49,7 +49,7 @@ angular.module('vnbidding.github.ioApp')
         }
 
         auction.currentPrice = auction.initPrice;
-        auction.bids = [];
+        auction.$bids = new Collection(config.refUrls.auctions + '/' + auction.$id + '/bids');
         auction.endTime = new Date(auction.endTime).getTime();
         if (auction.startTime) {
           auction.startTime = new Date(auction.startTime).getTime();
@@ -58,22 +58,48 @@ angular.module('vnbidding.github.ioApp')
         Auctions
           .add(auction, {createdTime: 'TIMESTAMP'})
           .then(function (data) {
-          if(!auction.startTime) {
-            auction.startTime = auction.createdTime;
-          }
+            if (!auction.startTime) {
+              auction.startTime = auction.createdTime;
+            }
 
-          data.ref.setWithPriority(auction.toObject(), auction.createdTime * -1);
-        });
+            data.ref.setWithPriority(auction.toObject(), auction.createdTime * -1);
+          });
 
         ProductRef.add(product);
       },
 
       bid: function (inc) {
-        var auction = this;
+        var auction = this
+          , bidData;
 
-        // do something with auction
+        if (!inc) {
+          inc = auction.minStep;
+        }
 
-        Auctions.update(this.$id);
+        auction.currentPrice += inc;
+
+        bidData = {
+          price: inc,
+          createTime: Date.now() + (config.serverValues.timeOffset),
+          user: {
+            id: $rootScope.user.id,
+            username: $rootScope.user.username,
+            name: $rootScope.user.name
+          }
+        };
+
+        auction.$bids.add(bidData, auction.currentPrice * -1);
+
+//        console.log(auction.$ref.child('bids'));
+//
+//        var newBid = auction.$ref.child('bids')
+//          .push(bidData);
+//
+//        console.log(newBid.name());
+//
+//        newBid.setPriority(auction.currentPrice);
+
+        Auctions.update(auction.$id);
       },
 
       getTimeLeft: function () {
@@ -85,25 +111,25 @@ angular.module('vnbidding.github.ioApp')
           , min = date.getMinutes()
           , second = date.getSeconds();
 
-        if(diff < 15000) {
+        if (diff < 15000) {
           return 'Đã xong';
         }
 
-        if(diff < 0) {
+        if (diff < 0) {
           return 'Vửa xong';
         }
 
-        if(hours > 36) {
+        if (hours > 36) {
           setTimeout(safeApply, 60 * 60 * 1000); // 1 tiếng update 1 lần
           return ~~(hours / 24) + ' ngày';
         }
 
-        if(hours > 1) {
+        if (hours > 1) {
           setTimeout(safeApply, 60 * 1000); // 1 phút update 1 lần
           return hours + ' tiếng';
         }
 
-        if(min >= 10) {
+        if (min >= 10) {
           setTimeout(safeApply, 30 * 1000); // 30 giây update 1 lần
           return min + ' phút';
         }
@@ -176,7 +202,7 @@ angular.module('vnbidding.github.ioApp')
             , ref = data.ref();
 
           var model = findById(id);
-          if(!model) {
+          if (!model) {
             model = new collection._ctor(item);
             collection._collection.push(model);
           }
@@ -184,8 +210,6 @@ angular.module('vnbidding.github.ioApp')
           model['.priority'] = priority;
           model.$id = id;
           model.$ref = ref;
-
-
 
 
           sort();
@@ -243,44 +267,46 @@ angular.module('vnbidding.github.ioApp')
           , defer = $q.defer()
           , promise = defer.promise;
 
-        if(!isNaN(serverValues)) {
+        if (!isNaN(serverValues)) {
           priority = serverValues;
           serverValues = {};
         }
 
-        var pushing = angular.fromJson( angular.toJson(model));
+        var pushing = angular.fromJson(angular.toJson(model));
 
         angular.forEach(serverValues, function (value, key) {
           pushing[key] = Firebase.ServerValue[value];
         });
 
         var ref = collectionRef.push(pushing);
+        model.$id = ref.name();
+        collection._collection.push(model);
 
-        if(!isNaN(priority)) {
+        if (!isNaN(priority)) {
           ref.setPriority(priority);
         }
 
         ref.once('value', function (data) {
           angular.extend(model, data.val());
-          defer.resolve({snapshot: data , ref: ref});
+          defer.resolve({snapshot: data, ref: ref});
         });
 
 
         return promise;
       },
 
-      update : function (idOrModel) {
+      update: function (idOrModel) {
         var id = (typeof idOrModel == 'string') ? idOrModel : idOrModel.$id
           , model = this.findById(id)
           , copy = model.toObject()
           , defer = $q.defer()
           , promise = defer.promise;
 
-        model.$ref.set(copy);
+        model.$ref.update(copy);
         model.$ref.once('value', function (data) {
           defer.resolve({
-            snapshot : data,
-            ref : model.$ref
+            snapshot: data,
+            ref: model.$ref
           });
         });
 

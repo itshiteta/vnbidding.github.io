@@ -94,15 +94,13 @@
                 <ul class="auction-list thumbnails">
                     <li class="span3" ng-repeat="auction in ongoing()">
                         <div class="auction">
-                            <img ng-src="{{ auction.product.imageUrl }}" alt=""/>
-                            <p class="auction-price">{{ auction.initPrice }}</p>
                             <p class="auction-name">{{ auction.product.name }}</p>
+                            <img ng-src="{{ auction.product.imageUrl }}" alt=""/>
                             <p class="auction-time">{{ auction.getTimeLeft() }}</p>
-                            <p class="auction-bid span12">
-                                <!--<input type="number" ng-model="bidPrice"/>-->
-                                <a class="">
-                                    <i class="arrow-right"></i>
-                                </a>
+                            <p class="auction-price">{{ auction.currentPrice }}đ</p>
+                            <p class="auction-top-bider">Đang dẫn đầu: {{ user.name }}</p>
+                            <p class="auction-bid">
+                                <a class="btn" ng-click="auction.bid()"><i class="arrow-left"></i></a>
                             </p>
                         </div>
                     </li>
@@ -119,13 +117,11 @@
                 <ul class="auction-list thumbnails">
                     <li class="span3" ng-repeat="auction in done()">
                         <div class="auction">
-                            <img ng-src="{{ auction.product.imageUrl }}" alt=""/>
-
-                            <p class="price">{{ auction.initPrice }}</p>
                             <p class="auction-name">{{ auction.product.name }}</p>
-
-                            <p class="time">{{ auction.endTime | date:'dd/MM/yyyy hh:mm:ss' }}</p>
-                            <!--<p class="time">00:13:09</p>-->
+                            <img ng-src="{{ auction.product.imageUrl }}" alt=""/>
+                            <p class="auction-time">{{ auction.endTime | date:'dd/MM/yyyy hh:mm:ss' }}</p>
+                            <p class="auction-price">{{ auction.initPrice }}đ</p>
+                            <p class="auction-top-bider">Người chiến thắng: {{ user.name }}</p>
                         </div>
                     </li>
                 </ul>
