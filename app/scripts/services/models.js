@@ -16,7 +16,7 @@ angular.module('vnbidding.github.ioApp')
         var copy = {};
 
         angular.forEach(this, function (value, key) {
-          if (key.indexOf("$") !== 0 && key !=='.priority' && value._collection) {
+          if (key.indexOf("$") !== 0 && key !=='.priority' && !value._collection) {
             copy[key] = value;
           }
         });
@@ -46,6 +46,11 @@ angular.module('vnbidding.github.ioApp')
         }
 
         auction.endTime = new Date(auction.endTime).getTime();
+        auction.creator = {
+          id: $rootScope.user.id,
+          email: $rootScope.user.email,
+          username: $rootScope.user.username
+        };
         if (auction.startTime) {
           auction.startTime = new Date(auction.startTime).getTime();
         }

@@ -117,7 +117,7 @@ angular.module('vnbidding.github.ioApp')
 
         var ref = collectionRef.push(pushing);
         model.$id = ref.name();
-        collection._collection.push(model);
+        //collection._collection.push(model);
 
         if (!isNaN(priority)) {
           ref.setPriority(priority);
