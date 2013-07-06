@@ -32,7 +32,7 @@ angular.module('vnbidding.github.ioApp')
         var copy = {};
 
         angular.forEach(this, function (value, key) {
-          if (key.indexOf("$") !== 0) {
+          if (key.indexOf("$") !== 0 && key !=='.priority' && value._collection) {
             copy[key] = value;
           }
         });
@@ -89,12 +89,13 @@ angular.module('vnbidding.github.ioApp')
           inc = auction.minStep;
         }
 
-        auction.currentPrice += inc;
-        auction.currentBidder = $rootScope.user.name;
+        //auction.currentPrice += inc;
+        //auction.currentBidder = $rootScope.user.name;
 
         bidData = {
-          price: auction.currentPrice,
-          createTime: Date.now() + (config.serverValues.timeOffset),
+          inc: inc,
+          //price: auction.currentPrice,
+          createdTime: Date.now() + (config.serverValues.timeOffset),
           user: {
             id: $rootScope.user.id,
             username: $rootScope.user.username,
@@ -103,7 +104,28 @@ angular.module('vnbidding.github.ioApp')
         };
 
         auction.addBid(bidData);
-        Auctions.update(auction.$id);
+        //Auctions.update(auction.$id);
+      },
+
+      getCurrentPrice: function () {
+        var bids = this.bids;
+
+        return _.reduce(bids, function (sum, bid) {
+          return sum += bid.inc;
+        }, 0) + this.initPrice;
+
+      },
+
+      getTopBidder: function () {
+        var bids = this.bids
+          , top = _.sortBy(bids, function (bid) {
+            return bid.createdTime * -1;
+          });
+
+        if(top[0]) {
+          return top[0].user;
+        }
+        return {};
       },
 
       getTimeLeft: function () {
@@ -170,13 +192,13 @@ angular.module('vnbidding.github.ioApp')
   })
 
 
-  .factory('Collection', function ($timeout, $q) {
+  .factory('Collection', function (safeApply, $q) {
     var cached = {};
 
     function Collection(ref, model) {
       var collection = this;
       this._collection = [];
-      this._ctor = model || function Model() {};
+      this._ctor = model || function Model(params) {angular.extend(this, params)};
 
       if (typeof ref == "string") {
         ref = new Firebase(ref);
@@ -200,7 +222,7 @@ angular.module('vnbidding.github.ioApp')
       this.findById = findById;
 
       ref.on('child_added', function (data) {
-        $timeout(function () {
+        safeApply(function () {
 
           var item = data.val()
             , priority = data.getPriority()
@@ -223,7 +245,7 @@ angular.module('vnbidding.github.ioApp')
       });
 
       ref.on('child_changed', function (data) {
-        $timeout(function () {
+        safeApply(function () {
 
           var id = data.name()
             , priority = data.getPriority()
@@ -240,7 +262,7 @@ angular.module('vnbidding.github.ioApp')
       });
 
       ref.on('child_moved', function (data) {
-        $timeout(function () {
+        safeApply(function () {
           var id = data.name()
             , priority = data.getPriority()
             , model = findById(id)
@@ -257,7 +279,7 @@ angular.module('vnbidding.github.ioApp')
       });
 
       ref.on('child_removed', function (data) {
-        $timeout(function () {
+        safeApply(function () {
           var id = data.name()
             , without = _.without(collection._collection, findById(id));
           collection._collection = without;
@@ -308,7 +330,7 @@ angular.module('vnbidding.github.ioApp')
           , defer = $q.defer()
           , promise = defer.promise;
 
-        model.$ref.set(copy);
+        model.$ref.update(copy);
         model.$ref.once('value', function (data) {
           defer.resolve({
             snapshot: data,
