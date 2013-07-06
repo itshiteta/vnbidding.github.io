@@ -6,8 +6,8 @@ angular.module("firebase", []).value("Firebase", Firebase);
 // synchronized with a Firebase location both ways.
 // TODO: Optimize to use child events instead of whole "value".
 angular.module("firebase").factory("angularFire", ["$q", "$parse", "$timeout",
-  function($q, $parse, $timeout) {
-    return function(ref, scope, name, ret) {
+  function ($q, $parse, $timeout) {
+    return function (ref, scope, name, ret) {
       var af = new AngularFire($q, $parse, $timeout, ref);
       return af.associate(scope, name, ret);
     };
@@ -29,21 +29,21 @@ function AngularFire($q, $parse, $timeout, ref) {
   }
 }
 AngularFire.prototype = {
-  disassociate: function() {
+  disassociate: function () {
     var self = this;
     if (self._unregister) {
       self._unregister();
     }
     this._fRef.off("value");
   },
-  associate: function($scope, name, ret) {
+  associate: function ($scope, name, ret) {
     var self = this;
     if (ret == undefined) {
       ret = [];
     }
     var deferred = this._q.defer();
     var promise = deferred.promise;
-    this._fRef.on("value", function(snap) {
+    this._fRef.on("value", function (snap) {
       var resolve = false;
       if (deferred) {
         resolve = deferred;
@@ -67,32 +67,32 @@ AngularFire.prototype = {
           return;
         }
       }
-      self._timeout(function() {
+      self._timeout(function () {
         self._resolve($scope, name, resolve, self._remoteValue)
       });
     });
     return promise;
   },
-  _log: function(msg) {
+  _log: function (msg) {
     if (console && console.log) {
       console.log(msg);
     }
   },
-  _resolve: function($scope, name, deferred, val) {
+  _resolve: function ($scope, name, deferred, val) {
     var self = this;
     this._parse(name).assign($scope, angular.copy(val));
     this._remoteValue = angular.copy(val);
     if (deferred) {
-      deferred.resolve(function() {
+      deferred.resolve(function () {
         self.disassociate();
       });
       this._watch($scope, name);
     }
   },
-  _watch: function($scope, name) {
+  _watch: function ($scope, name) {
     // Watch for local changes.
     var self = this;
-    self._unregister = $scope.$watch(name, function() {
+    self._unregister = $scope.$watch(name, function () {
       if (self._initial) {
         self._initial = false;
         return;
@@ -109,15 +109,15 @@ AngularFire.prototype = {
 // Explicit syncing. Provides a collection object you can modify.
 // Original code by @petebacondarwin, from:
 // https://github.com/petebacondarwin/angular-firebase/blob/master/ng-firebase-collection.js
-angular.module("firebase").factory("angularFireCollection", ["$timeout", function($timeout) {
+angular.module("firebase").factory("angularFireCollection", ["$timeout", function ($timeout) {
   function angularFireItem(ref, index) {
     this.$ref = ref.ref();
     this.$id = ref.name();
     this.$index = index;
-      angular.extend(this, {priority:ref.getPriority()}, ref.val());
+    angular.extend(this, {priority: ref.getPriority()}, ref.val());
   }
 
-  return function(collectionUrlOrRef, initialCb) {
+  return function (collectionUrlOrRef, initialCb) {
     var collection = [];
     var indexes = {};
 
@@ -144,11 +144,11 @@ angular.module("firebase").factory("angularFireCollection", ["$timeout", functio
       indexes[id] = undefined;
     }
 
-    function updateChild (index, item) {
+    function updateChild(index, item) {
       collection[index] = item;
     }
 
-    function moveChild (from, to, item) {
+    function moveChild(from, to, item) {
       collection.splice(from, 1);
       collection.splice(to, 0, item);
       updateIndexes(from, to);
@@ -170,16 +170,16 @@ angular.module("firebase").factory("angularFireCollection", ["$timeout", functio
       collectionRef.once("value", initialCb);
     }
 
-    collectionRef.on("child_added", function(data, prevId) {
-      $timeout(function() {
+    collectionRef.on("child_added", function (data, prevId) {
+      $timeout(function () {
         var index = getIndex(prevId);
         addChild(index, new angularFireItem(data, index));
         updateIndexes(index);
       });
     });
 
-    collectionRef.on("child_removed", function(data) {
-      $timeout(function() {
+    collectionRef.on("child_removed", function (data) {
+      $timeout(function () {
         var id = data.name();
         var pos = indexes[id];
         removeChild(id);
@@ -187,8 +187,8 @@ angular.module("firebase").factory("angularFireCollection", ["$timeout", functio
       });
     });
 
-    collectionRef.on("child_changed", function(data, prevId) {
-      $timeout(function() {
+    collectionRef.on("child_changed", function (data, prevId) {
+      $timeout(function () {
         var index = indexes[data.name()];
         var newIndex = getIndex(prevId);
         var item = new angularFireItem(data, index);
@@ -200,8 +200,8 @@ angular.module("firebase").factory("angularFireCollection", ["$timeout", functio
       });
     });
 
-    collectionRef.on("child_moved", function(ref, prevId) {
-      $timeout(function() {
+    collectionRef.on("child_moved", function (ref, prevId) {
+      $timeout(function () {
         var oldIndex = indexes[ref.name()];
         var newIndex = getIndex(prevId);
         var item = collection[oldIndex];
@@ -209,7 +209,7 @@ angular.module("firebase").factory("angularFireCollection", ["$timeout", functio
       });
     });
 
-    collection.add = function(item, cb) {
+    collection.add = function (item, cb) {
       var ref;
       if (!cb) {
         ref = collectionRef.ref().push(item);
@@ -218,15 +218,15 @@ angular.module("firebase").factory("angularFireCollection", ["$timeout", functio
       }
       return ref;
     };
-    collection.remove = function(itemOrId) {
+    collection.remove = function (itemOrId) {
       var item = angular.isString(itemOrId) ? collection[indexes[itemOrId]] : itemOrId;
       item.$ref.remove();
     };
 
-    collection.update = function(itemOrId) {
+    collection.update = function (itemOrId) {
       var item = angular.isString(itemOrId) ? collection[indexes[itemOrId]] : itemOrId;
       var copy = {};
-      angular.forEach(item, function(value, key) {
+      angular.forEach(item, function (value, key) {
         if (key.indexOf("$") !== 0) {
           copy[key] = value;
         }
@@ -242,7 +242,7 @@ angular.module("firebase").factory("angularFireCollection", ["$timeout", functio
 // Authentication support for AngularFire.
 angular.module("firebase").factory("angularFireAuth", [
   "$rootScope", "$parse", "$timeout", "$location",
-  function($rootScope, $parse, $timeout, $location) {
+  function ($rootScope, $parse, $timeout, $location) {
 
     function deconstructJWT(token) {
       var segments = token.split(".");
@@ -255,7 +255,7 @@ angular.module("firebase").factory("angularFireAuth", [
 
     function updateExpression(scope, name, val, cb) {
       if (name) {
-        $timeout(function() {
+        $timeout(function () {
           $parse(name).assign(scope, val);
           cb();
         });
@@ -263,7 +263,7 @@ angular.module("firebase").factory("angularFireAuth", [
     }
 
     return {
-      initialize: function(url, options) {
+      initialize: function (url, options) {
         var self = this;
 
         options = options || {};
@@ -274,7 +274,8 @@ angular.module("firebase").factory("angularFireAuth", [
         if (options.name) {
           this._name = options.name;
         }
-        this._cb = function(){};
+        this._cb = function () {
+        };
         if (options.callback && typeof options.callback === "function") {
           this._cb = options.callback;
         }
@@ -282,7 +283,7 @@ angular.module("firebase").factory("angularFireAuth", [
         this._redirectTo = null;
         this._authenticated = false;
         if (options.path) {
-          $rootScope.$on("$routeChangeStart", function(e, next, current) {
+          $rootScope.$on("$routeChangeStart", function (e, next, current) {
             if (next.authRequired && !self._authenticated) {
               self._redirectTo =
                 next.pathTo === options.path ? "/" : next.pathTo;
@@ -304,7 +305,7 @@ angular.module("firebase").factory("angularFireAuth", [
           $rootScope.$broadcast("angularFireAuth:error", err);
           return;
         }
-        var client = new FirebaseAuthClient(this._ref, function(err, user) {
+        var client = new FirebaseAuthClient(this._ref, function (err, user) {
           self._cb(err, user);
           if (err) {
             $rootScope.$broadcast("angularFireAuth:error", err);
@@ -316,38 +317,38 @@ angular.module("firebase").factory("angularFireAuth", [
         });
         this._authClient = client;
       },
-      login: function(tokenOrProvider, options) {
+      login: function (tokenOrProvider, options) {
         switch (tokenOrProvider) {
-        case "github":
-        case "persona":
-        case "twitter":
-        case "facebook":
-        case "password":
-          if (!this._authClient) {
-            var err = new Error("Simple Login not initialized");
-            $rootScope.$broadcast("angularFireAuth:error", err);
-          } else {
-            this._authClient.login(tokenOrProvider, options);
-          }
-          break;
-        default:
-          // Custom Login.
-          var claims, self = this;
-          try {
-            claims = deconstructJWT(tokenOrProvider);
-            this._ref.auth(tokenOrProvider, function(err) {
-              if (err) {
-                $rootScope.$broadcast("angularFireAuth:error", err);
-              } else {
-                self._loggedIn();
-              }
-            });
-          } catch(e) {
-            $rootScope.$broadcast("angularFireAuth:error", e)
-          }
+          case "github":
+          case "persona":
+          case "twitter":
+          case "facebook":
+          case "password":
+            if (!this._authClient) {
+              var err = new Error("Simple Login not initialized");
+              $rootScope.$broadcast("angularFireAuth:error", err);
+            } else {
+              this._authClient.login(tokenOrProvider, options);
+            }
+            break;
+          default:
+            // Custom Login.
+            var claims, self = this;
+            try {
+              claims = deconstructJWT(tokenOrProvider);
+              this._ref.auth(tokenOrProvider, function (err) {
+                if (err) {
+                  $rootScope.$broadcast("angularFireAuth:error", err);
+                } else {
+                  self._loggedIn();
+                }
+              });
+            } catch (e) {
+              $rootScope.$broadcast("angularFireAuth:error", e)
+            }
         }
       },
-      logout: function() {
+      logout: function () {
         if (this._authClient) {
           this._authClient.logout();
         } else {
@@ -355,10 +356,10 @@ angular.module("firebase").factory("angularFireAuth", [
           this._loggedOut();
         }
       },
-      _loggedIn: function(user) {
+      _loggedIn: function (user) {
         var self = this;
         this._authenticated = true;
-        updateExpression(this._scope, this._name, user, function() {
+        updateExpression(this._scope, this._name, user, function () {
           $rootScope.$broadcast("angularFireAuth:login", user);
           if (self._redirectTo) {
             $location.path(self._redirectTo);
@@ -366,9 +367,9 @@ angular.module("firebase").factory("angularFireAuth", [
           }
         });
       },
-      _loggedOut: function() {
+      _loggedOut: function () {
         this._authenticated = false;
-        updateExpression(this._scope, this._name, null, function() {
+        updateExpression(this._scope, this._name, null, function () {
           $rootScope.$broadcast("angularFireAuth:logout");
         });
       }

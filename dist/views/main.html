@@ -89,8 +89,10 @@
                             <p class="auction-name">{{ auction.product.name }}</p>
                             <img ng-src="{{ auction.product.imageUrl }}" alt="">
                             <p class="auction-time">{{ auction.getTimeLeft() }}</p>
-                            <p class="auction-price">{{ auction.currentPrice }}đ</p>
-                            <p class="auction-top-bider">Đang dẫn đầu: {{ auction.currentBidder }}</p>
+                            <p class="auction-price">{{ auction.getCurrentPrice() }}đ</p>
+                            <p class="auction-top-bider">
+                                Đang dẫn đầu: {{ auction.getTopBidder().name || 'chưa ai bid' }}
+                            </p>
                             <p class="auction-bid">
                                 <a class="btn" ng-click="auction.bid()"><i class="arrow-left"></i></a>
                             </p>
