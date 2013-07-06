@@ -91,7 +91,7 @@ angular.module('vnbidding.github.ioApp')
       },
 
       getCurrentPrice: function () {
-        var bids = this.bids;
+        var bids = this.getBids();
 
         return _.reduce(bids, function (sum, bid) {
           return sum += bid.inc;
@@ -100,7 +100,7 @@ angular.module('vnbidding.github.ioApp')
       },
 
       getTopBidder: function () {
-        var bids = this.bids
+        var bids =  this.getBids()
           , top = _.sortBy(bids, function (bid) {
             return bid.createdTime * -1;
           });
