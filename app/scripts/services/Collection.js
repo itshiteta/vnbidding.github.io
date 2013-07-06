@@ -152,6 +152,14 @@ angular.module('vnbidding.github.ioApp')
 
       all: function () {
         return this._collection;
+      },
+
+      filter: function (fn, reject) {
+        if(reject === true) {
+          return _.reject(this._collection, fn);
+        }
+
+        return _.filter(this._collection, fn);
       }
     };
 

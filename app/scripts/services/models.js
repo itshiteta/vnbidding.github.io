@@ -1,27 +1,11 @@
 'use strict';
 
 angular.module('vnbidding.github.ioApp')
-  .factory('models', function (angularFire, angularFireCollection, safeApply, $timeout, Collection, $rootScope) {
-    var config = {
-        refUrls: {
-          clockSkew: 'https://bidding.firebaseio.com/.info/serverTimeOffset',
-          auctions: 'https://bidding.firebaseio.com/auctions',
-          users: 'https://bidding.firebaseio.com/users',
-          products: 'https://bidding.firebaseio.com/products'
-        },
-        serverValues: {}
-      }
-      , AuctionRef = angularFireCollection(new Firebase(config.refUrls.auctions))
-      , UserRef = angularFireCollection(new Firebase(config.refUrls.users))
-      , ProductRef = angularFireCollection(new Firebase(config.refUrls.products));
+  .factory('models', function (safeApply, biddingConfig, Collection, $rootScope) {
+    var Auctions = Collection(biddingConfig.refUrls.auctions, Auction)
+      , Products = Collection(biddingConfig.refUrls.products);
 
-    var Auctions = Collection(config.refUrls.auctions, Auction);
 
-    function findByRef(ref, collectionRef) {
-      return _.find(collectionRef, function (item) {
-        return item.$id == ref.name()
-      });
-    }
 
     function Auction(auction) {
       _.extend(this, auction);
@@ -41,7 +25,7 @@ angular.module('vnbidding.github.ioApp')
         return angular.fromJson(angular.toJson(copy));
       },
       _getBidCollection: function () {
-        return Collection(config.refUrls.auctions + '/' + this.$id + '/bids');
+        return Collection(biddingConfig.refUrls.auctions + '/' + this.$id + '/bids');
       },
       addBid: function (bid) {
         var bids = this._getBidCollection();
@@ -61,8 +45,6 @@ angular.module('vnbidding.github.ioApp')
           throw 'Product should not be NULL';
         }
 
-        auction.currentPrice = auction.initPrice;
-        auction.currentBidder = $rootScope.user.name;
         auction.endTime = new Date(auction.endTime).getTime();
         if (auction.startTime) {
           auction.startTime = new Date(auction.startTime).getTime();
@@ -78,7 +60,7 @@ angular.module('vnbidding.github.ioApp')
             data.ref.setWithPriority(auction.toObject(), auction.createdTime * -1);
           });
 
-        ProductRef.add(product);
+        Products.add(product);
       },
 
       bid: function (inc) {
@@ -89,13 +71,10 @@ angular.module('vnbidding.github.ioApp')
           inc = auction.minStep;
         }
 
-        //auction.currentPrice += inc;
-        //auction.currentBidder = $rootScope.user.name;
-
         bidData = {
           inc: inc,
           //price: auction.currentPrice,
-          createdTime: Date.now() + (config.serverValues.timeOffset),
+          createdTime: Date.now() + (biddingConfig.serverValues.timeOffset),
           user: {
             id: $rootScope.user.id,
             username: $rootScope.user.username,
@@ -104,7 +83,6 @@ angular.module('vnbidding.github.ioApp')
         };
 
         auction.addBid(bidData);
-        //Auctions.update(auction.$id);
       },
 
       getCurrentPrice: function () {
@@ -129,7 +107,7 @@ angular.module('vnbidding.github.ioApp')
       },
 
       getTimeLeft: function () {
-        var timestamp = Date.now() + (config.serverValues.timeOffset)
+        var timestamp = Date.now() + (biddingConfig.serverValues.timeOffset)
           , endTime = this.endTime
           , diff = endTime - timestamp
           , date = new Date(diff)
@@ -166,7 +144,7 @@ angular.module('vnbidding.github.ioApp')
 
       },
       isDone: function () {
-        var timestamp = Date.now() + (config.serverValues.timeOffset)
+        var timestamp = Date.now() + (biddingConfig.serverValues.timeOffset)
           , endTime = this.endTime;
 
         return endTime < timestamp;
@@ -177,16 +155,9 @@ angular.module('vnbidding.github.ioApp')
       return Auctions;
     };
 
-    var clock = new Firebase(config.refUrls.clockSkew);
-    clock.on('value', function (snapshot) {
-      var offset = snapshot.val();
-      config.serverValues.timeOffset = offset;
-      safeApply();
-    });
 
 
     return  {
-      config: config,
       Auction: Auction
     }
   });

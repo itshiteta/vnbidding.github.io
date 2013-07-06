@@ -7,11 +7,11 @@ angular.module('vnbidding.github.ioApp')
     $scope.auctions = models.Auction.get();
 
     $scope.done = function () {
-      return _.filter($scope.auctions.all(), $scope.checkDone);
+      return $scope.auctions.filter($scope.checkDone);
     };
 
     $scope.ongoing = function () {
-      return _.reject($scope.auctions.all(), $scope.checkDone);
+      return $scope.auctions.filter($scope.checkDone, true);
     };
 
 
